@@ -152,7 +152,6 @@ function drawPerson() {
     fill(34,13,16,255);
     rect(989, 460, 19, 70, 10);
     pop();
-    
 
 }
 
