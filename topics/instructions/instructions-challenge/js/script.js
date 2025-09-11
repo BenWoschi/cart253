@@ -39,6 +39,13 @@ function draw() {
 
     //Sun Light
     drawSunlight();
+
+    //Dome
+    drawDome();
+
+    //Person
+    drawPerson();
+
 }
 
 function drawSand() {
@@ -61,7 +68,7 @@ function drawGradient() {
 function drawLightsand() {
     push();
     noStroke();
-    fill(67, 60, 56, 120);
+    fill(67, 60, 56, 140);
     rect(0, 650, 1920, 550);
     pop();
 }
@@ -90,3 +97,63 @@ function drawSunlight() {
     ellipse(1350, 275, 75, 75);
     pop();
 }
+
+function drawDome() {
+    push();
+    noStroke();
+    fill(61, 58, 58, 255);
+    rect(500, 750, 500, 700, 100);
+    pop();
+   
+    push();
+    noStroke();
+    fill(65, 62, 62, 255);
+    ellipse(150, 1000, 1300, 1300);
+    pop();
+
+    push();
+    noStroke();
+    fill(63, 60, 60, 255);
+    rect(180, 770, 350, 700, 120);
+    pop();
+
+    push();
+    noStroke();
+    fill(61, 58, 58, 255);
+    rect(230, 790, 300, 700, 100);
+    pop();
+}
+
+function drawPerson() {
+    // Head
+    push();
+    noStroke();
+    fill(35,13,16,255);
+    ellipse(1000, 450, 40, 40);
+    pop();
+   
+    // Torso Highlight
+    push();
+    noStroke();
+    fill("#fcd3dc");
+    rect(980, 473, 45, 70, 10);
+    pop();
+
+    // Torso
+    push();
+    noStroke();
+    fill(35,13,16,255);
+    rect(978, 473, 45, 70, 10);
+    pop();
+
+    // Neck
+    push();
+    noStroke();
+    fill(34,13,16,255);
+    rect(989, 460, 19, 70, 10);
+    pop();
+    
+
+}
+
+ 
