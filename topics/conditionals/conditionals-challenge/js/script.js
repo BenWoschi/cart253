@@ -13,10 +13,7 @@ const puck = {
     size: 100,
     fill: "#ff0000",
 
-    fills: {
-        noOverlap: "#ff0000", // red for no overlap
-        overlap: "#00ff00" // green for overlap
-    }
+    
 };
 
 const user = {
@@ -30,7 +27,12 @@ const target = {
     x: 300,
     y: 100,
     size: 50,
-    fill: "#42f5d4"
+    fill: "#42f5d4",
+
+    fills: {
+        noOverlap: "#42f5d4", // same colour for no overlap
+        overlap: "#fff" // white for overlap
+    }
 };
 
 /**
@@ -52,10 +54,11 @@ function draw() {
   // Draw the user and puck
   drawUser();
   drawPuck();
-    
   movePuck();
-    
+   
+  // 
   drawTarget();
+  checkTarget();
 }
 
 /**
@@ -113,6 +116,19 @@ function movePuck() {
         if (user.y >= puck.y) {
             puck.y -= 3;
         }
+    }
+
+}
+
+function checkTarget() {
+    const d = dist(puck.x, puck.y, target.x, target.y);
+    const overlap = (d < puck.size / 2 + target.size / 2);
+
+    if (overlap) {
+        target.fill = target.fills.overlap;
+    }
+    else {
+        target.fill = target.fills.noOverlap;
     }
 
 }
