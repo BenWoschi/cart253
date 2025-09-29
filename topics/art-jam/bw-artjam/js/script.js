@@ -6,6 +6,11 @@
  */
 
 "use strict";
+let light = {
+    size: 75,
+    fill: "#f7fccc"
+}
+
 const flowerMiddle = {
     size: 100,
     fill: "#090309ff"
@@ -25,8 +30,8 @@ let petalsAngle = TWO_PI / petalsAmount;
 */
 function setup() {
     createCanvas(windowWidth, windowHeight);
+    noCursor();
 }
-
 
 /**
  * Draws the flower along with cursor "light"
@@ -37,6 +42,9 @@ function draw() {
 //Flower
     drawFlowerMiddle();
     drawPetals();
+
+//Light on Cursor
+    drawLight();
 }
 
 function drawFlowerMiddle() {
@@ -58,4 +66,11 @@ function drawPetals() {
         ellipse(0, flowerMiddle.size / 3 + petals.height / 4, petals.width, petals.height);
     }
     pop();
+}
+
+function drawLight() {
+    push();
+    noStroke();
+    fill(light.fill);
+    ellipse(mouseX, mouseY, light.size);
 }
