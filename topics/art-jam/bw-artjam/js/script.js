@@ -2,10 +2,12 @@
  * Art Jam
  * Ben Woschitz
  * 
- * Abstract representation of myself
+ * Abstract representation of a part of myself
  */
 
 "use strict";
+
+//Define Light/Gradient
 const coreLight = {
     size: 75,
     fill: "#f7fccc"
@@ -24,6 +26,7 @@ let lightRadius = {
     size: 150
 }
 
+//Defining the flower
 const flowerMiddle = {
     size: 100,
     fill: "#120613"
@@ -37,6 +40,15 @@ let petals = {
     
 let petalsAmount = 9;
 let petalsAngle = TWO_PI / petalsAmount;
+
+let flowerColour = {
+    fill: "#D8B4DA",
+
+    fills: {
+        noOverlap: "#120613", // same colour for no overlap
+        overlap: "#D8B4DA" // reveal colour on overlap
+    }
+};
 
 /**
  * Creates Canvas
@@ -52,29 +64,29 @@ function setup() {
 function draw() {
     background("#120d1c");
 
-    //Flower
+//Flower
     drawFlowerMiddle();
     drawPetals();
 
-    //Light on Cursor
+//Light on Cursor
     drawLight();
     lightGradient();
 }
 
+//Flower center
 function drawFlowerMiddle() {
-    push();
     noStroke();
     fill(flowerMiddle.fill);
     ellipse(width / 2, height / 2, flowerMiddle.size);
-    pop();
 }
 
+//Surrounding Petals
 function drawPetals() {
     push();
     translate(width / 2, height / 2);
     noStroke();
     fill(petals.fill);
-    //Petals rotate around center
+//Petals rotate around center
     for (let i = 0; i < petalsAmount; i++) {
         rotate(TWO_PI / petalsAmount);
         ellipse(0, flowerMiddle.size / 3 + petals.height / 4, petals.width, petals.height);
@@ -82,14 +94,22 @@ function drawPetals() {
     pop();
 }
 
+//Mapping inner light gradient
 function drawLight() {
     push();
-    noStroke();
-    fill(coreLight.fill);
-    ellipse(mouseX, mouseY, coreLight.size);
+    for (let r = coreLight.size; r > 0; r--) {
+        let m = map(r, 0, coreLight.size, 0, 1);
+        let c = lerpColor(coreLight.fill, outerGradient.fill, m);
+        let a = map(r, coreLight.size, 0, 0, 15);
+        fill(c.levels[0], c.levels[1], c.levels[2], a);
+        ellipse(mouseX, mouseY, r);
+    }
+    pop();
 }
 
+//Mapping outer light gradient
 function lightGradient() {
+    push();
     for (let r = lightRadius.size; r > 0; r--) {
         let m = map(r, 0, lightRadius.size, 0, 1);
         let c = lerpColor(innerGradient.fill, outerGradient.fill, m);
@@ -97,4 +117,18 @@ function lightGradient() {
         fill(c.levels[0], c.levels[1], c.levels[2], a);
         ellipse(mouseX, mouseY, r * 1.5, r * 1.5);
     }
+    pop();
+}
+
+function revealColour() {
+    const d = dist(lightRadius.size, width / 2, height / 2);
+    const overlap = (d < lightRadius.size + width / 2, height / 2);
+
+    if (overlap) {
+        flowerColour.fill = flowerColour.fills.overlap;
+    }
+    else {
+        flowerColour.fill = flowerColour.fills.overlap;
+    }
+
 }
