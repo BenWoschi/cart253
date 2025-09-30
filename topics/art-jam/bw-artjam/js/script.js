@@ -6,14 +6,27 @@
  */
 
 "use strict";
-let light = {
+const coreLight = {
     size: 75,
     fill: "#f7fccc"
 }
 
+let innerGradient = {
+    fill: "#f7fccc"
+}
+
+let outerGradient = {
+    fill: "#bbbe9fff"
+    
+}
+
+let lightRadius = {
+    size: 150
+}
+
 const flowerMiddle = {
     size: 100,
-    fill: "#090309ff"
+    fill: "#120613"
     };
 
 let petals = {
@@ -39,12 +52,13 @@ function setup() {
 function draw() {
     background("#120d1c");
 
-//Flower
+    //Flower
     drawFlowerMiddle();
     drawPetals();
 
-//Light on Cursor
+    //Light on Cursor
     drawLight();
+    lightGradient();
 }
 
 function drawFlowerMiddle() {
@@ -71,6 +85,16 @@ function drawPetals() {
 function drawLight() {
     push();
     noStroke();
-    fill(light.fill);
-    ellipse(mouseX, mouseY, light.size);
+    fill(coreLight.fill);
+    ellipse(mouseX, mouseY, coreLight.size);
+}
+
+function lightGradient() {
+    for (let r = lightRadius.size; r > 0; r--) {
+        let m = map(r, 0, lightRadius.size, 0, 1);
+        let c = lerpColor(innerGradient.fill, outerGradient.fill, m);
+        let a = map(r, lightRadius.size, 0, 0, 15);
+        fill(c.levels[0], c.levels[1], c.levels[2], a);
+        ellipse(mouseX, mouseY, r * 1.5, r * 1.5);
+    }
 }
