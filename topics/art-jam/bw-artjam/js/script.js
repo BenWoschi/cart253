@@ -28,18 +28,18 @@ let lightRadius = {
 
 //Defining the flower
 const flowerMiddle = {
-    size: 100,
-    fill: "#120613"
+    size: 150,
+    fill: "#060409ff"
     };
 
 let petals = {
-    width: 60,
-    height: 150,
-    fill: "#120613",
+    width: 80,
+    height: 200,
+    fill: "#060409ff",
 
     fills: {
-        noOverlap: "#120613", // same colour for no overlap
-        overlap: "#D8B4DA" // reveal colour on overlap
+        noOverlap: "#060409ff", // same colour for no overlap
+        overlap: "#b294b3ff" // reveal colour on overlap
     }
     };
     
@@ -58,7 +58,7 @@ function setup() {
  * Draws the flower along with cursor "light"
 */
 function draw() {
-    background("#120d1c");
+    background("#060409ff");
 
 //Flower
     drawFlowerMiddle();
@@ -122,7 +122,7 @@ function lightGradient() {
 //in proximity to the light source (mouse x and y)
 function revealColour() {
     let d = dist(mouseX, mouseY, width / 2, height / 2);
-    let flowerRadius = flowerMiddle.size / 2 + petals.height * 1.5;
+    let flowerRadius = flowerMiddle.size / 2 + petals.height * 1.25;
     let m = constrain(map(d, 0, flowerRadius, 0, 1), 0, 1);
     let c = lerpColor(color(petals.fills.overlap), color(petals.fills.noOverlap), m);
     
