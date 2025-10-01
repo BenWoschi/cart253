@@ -3,6 +3,15 @@
  * Ben Woschitz
  * 
  * Abstract representation about discovering myself
+ * 
+ * Controls and Objective:
+ * Simply move your cursor and find the flower, hovering over the flower reveals it.
+ * 
+ * Uses and References/Help:
+ * This project uses [p5.js](https://p5js.org).
+ * Reference on how [for] loops are used (https://p5js.org/reference/p5/for/).
+ * Reference on how [lerpColor] is used (https://p5js.org/reference/p5/lerpColor/).
+ * Reference used from elishafitra on how to sketch a flower on [canvas] (https://editor.p5js.org/elishafitri/sketches/nbrLz0idJ).
  */
 
 "use strict";
@@ -28,20 +37,20 @@ let lightRadius = {
 
 //Defining the flower
 const flowerMiddle = {
-    size: 100,
+    size: 150,
     fill: "#060409ff"
-    };
+};
 
 let petals = {
-    width: 60,
-    height: 150,
+    width: 80,
+    height: 200,
     fill: "#060409ff",
 
     fills: {
         noOverlap: "#060409ff", // same colour for no overlap
         overlap: "#b294b3ff" // reveal colour on overlap
-    }
-    };
+}
+};
     
 let petalsAmount = 9;
 let petalsAngle = TWO_PI / petalsAmount;
@@ -71,14 +80,18 @@ function draw() {
     revealColour();
 }
 
-//Flower center
+/**
+ * Draws the flower center
+ */
 function drawFlowerMiddle() {
     noStroke();
     fill(flowerMiddle.fill);
     ellipse(width / 1.5, height / 1.5, flowerMiddle.size);
 }
 
-//Surrounding Petals
+/**
+ * Draws the surrounding petals
+ */
 function drawPetals() {
     push();
     translate(width / 1.5, height / 1.5);
@@ -92,7 +105,9 @@ function drawPetals() {
     pop();
 }
 
-//Mapping inner light gradient
+/**
+ * Draws and maps the inner gradient light
+ */
 function drawLight() {
     push();
     for (let r = coreLight.size; r > 0; r--) {
@@ -105,7 +120,9 @@ function drawLight() {
     pop();
 }
 
-//Mapping outer light gradient
+/**
+ * Draws and maps the outer light gradient
+ */
 function lightGradient() {
     push();
     for (let r = lightRadius.size; r > 0; r--) {
@@ -118,8 +135,9 @@ function lightGradient() {
     pop();
 }
 
-//Utilizing constrain and distance to change the colour of the flower
-//in proximity to the light source (mouse x and y)
+/**
+ * Allows fill change of flower when overlapping with light cursor
+ */
 function revealColour() {
     let d = dist(mouseX, mouseY, width / 1.5, height / 1.5);
     let flowerRadius = flowerMiddle.size / 2 + petals.height * 1.25;

@@ -22,7 +22,7 @@ This bit should attribute any code, assets or other elements used taken from oth
 
 > - This project uses [p5.js](https://p5js.org).
 > - Reference on how [for] loops are used (https://p5js.org/reference/p5/for/).
-> - Reference on how [lerpColor] is used (https://p5js.org/reference/p5/lerpColor/)
+> - Reference on how [lerpColor] is used (https://p5js.org/reference/p5/lerpColor/).
 > - Reference used from elishafitra on how to sketch a flower on [canvas] (https://editor.p5js.org/elishafitri/sketches/nbrLz0idJ).
 
 ## License
