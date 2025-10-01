@@ -118,16 +118,13 @@ function lightGradient() {
     pop();
 }
 
+//Utilizing constrain and distance to change the colour of the flower
+//in proximity to the light source (mouse x and y)
 function revealColour() {
     let d = dist(mouseX, mouseY, width / 2, height / 2);
-    let flowerRadius = flowerMiddle.size / 2 + petals.height;
-    let overlap = (d < flowerRadius * 1.1);
-
-    if (overlap) {
-        petals.fill = petals.fills.overlap;
-    }
-    else {
-        petals.fill = petals.fills.noOverlap;
-    }
-
+    let flowerRadius = flowerMiddle.size / 2 + petals.height * 1.5;
+    let m = constrain(map(d, 0, flowerRadius, 0, 1), 0, 1);
+    let c = lerpColor(color(petals.fills.overlap), color(petals.fills.noOverlap), m);
+    
+    petals.fill = c;
 }
