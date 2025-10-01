@@ -35,20 +35,16 @@ const flowerMiddle = {
 let petals = {
     width: 60,
     height: 150,
-    fill: "#120613"
-    };
-    
-let petalsAmount = 9;
-let petalsAngle = TWO_PI / petalsAmount;
-
-let flowerColour = {
-    fill: "#D8B4DA",
+    fill: "#120613",
 
     fills: {
         noOverlap: "#120613", // same colour for no overlap
         overlap: "#D8B4DA" // reveal colour on overlap
     }
-};
+    };
+    
+let petalsAmount = 9;
+let petalsAngle = TWO_PI / petalsAmount;
 
 /**
  * Creates Canvas
@@ -71,6 +67,8 @@ function draw() {
 //Light on Cursor
     drawLight();
     lightGradient();
+
+    revealColour();
 }
 
 //Flower center
@@ -121,14 +119,15 @@ function lightGradient() {
 }
 
 function revealColour() {
-    const d = dist(lightRadius.size, width / 2, height / 2);
-    const overlap = (d < lightRadius.size + width / 2, height / 2);
+    let d = dist(mouseX, mouseY, width / 2, height / 2);
+    let flowerRadius = flowerMiddle.size / 2 + petals.height;
+    let overlap = (d < flowerRadius * 1.1);
 
     if (overlap) {
-        flowerColour.fill = flowerColour.fills.overlap;
+        petals.fill = petals.fills.overlap;
     }
     else {
-        flowerColour.fill = flowerColour.fills.overlap;
+        petals.fill = petals.fills.noOverlap;
     }
 
 }
