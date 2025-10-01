@@ -2,7 +2,7 @@
  * Art Jam
  * Ben Woschitz
  * 
- * Abstract representation of a part of myself
+ * Abstract representation about discovering myself
  */
 
 "use strict";
@@ -28,13 +28,13 @@ let lightRadius = {
 
 //Defining the flower
 const flowerMiddle = {
-    size: 150,
+    size: 100,
     fill: "#060409ff"
     };
 
 let petals = {
-    width: 80,
-    height: 200,
+    width: 60,
+    height: 150,
     fill: "#060409ff",
 
     fills: {
@@ -75,13 +75,13 @@ function draw() {
 function drawFlowerMiddle() {
     noStroke();
     fill(flowerMiddle.fill);
-    ellipse(width / 2, height / 2, flowerMiddle.size);
+    ellipse(width / 1.5, height / 1.5, flowerMiddle.size);
 }
 
 //Surrounding Petals
 function drawPetals() {
     push();
-    translate(width / 2, height / 2);
+    translate(width / 1.5, height / 1.5);
     noStroke();
     fill(petals.fill);
 //Petals rotate around center
@@ -121,7 +121,7 @@ function lightGradient() {
 //Utilizing constrain and distance to change the colour of the flower
 //in proximity to the light source (mouse x and y)
 function revealColour() {
-    let d = dist(mouseX, mouseY, width / 2, height / 2);
+    let d = dist(mouseX, mouseY, width / 1.5, height / 1.5);
     let flowerRadius = flowerMiddle.size / 2 + petals.height * 1.25;
     let m = constrain(map(d, 0, flowerRadius, 0, 1), 0, 1);
     let c = lerpColor(color(petals.fills.overlap), color(petals.fills.noOverlap), m);
