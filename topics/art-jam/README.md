@@ -2,7 +2,7 @@ Art Jam - Self-Discovery
 
 BEN WOSCHITZ
 
-[View this project online](URL_FOR_THE_RUNNING_PROJECT)
+[View this project online](https://benwoschi.github.io/cart253/topics/art-jam/)
 
 ## Description
 
