@@ -55,6 +55,11 @@ function setup() {
 
 function draw() {
     background("#172110ff");
+
+    /**
+    * Draws all the leaves in the background
+    */
+    drawLeaves(270, -200, 1.5, 0.4, 1, -1, "#3b5828ff");
     drawLeaves(1780, 450, 3, 1.7, -1, 1, "#3b5828ff");
     drawLeaves(550, 1150, 2.1, -0.1, -1, 1, "#3b5828ff");
     drawLeaves(-400, 100, 2.5, 1.1, 1, -1, "#3b5828ff");
