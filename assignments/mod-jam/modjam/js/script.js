@@ -21,14 +21,14 @@ const frog = {
     // The frog's body has a position
     body: {
         x: 320,
-        y: 420,
+        y: 820,
     },
     // The frog's tongue has a position, size, speed, and state
     tongue: {
         x: undefined,
-        y: 480,
+        y: 880,
         size: 20,
-        speed: 20,
+        speed: 45,
         // Determines how the tongue moves each frame
         state: "idle" // State can be: idle, outbound, inbound
     }
@@ -38,23 +38,41 @@ const frog = {
 // Has a position, size, and speed of horizontal movement
 const fly = {
     x: 0,
-    y: 200, // Will be random
-    size: 10,
-    speed: 3
+    y: 400, // Will be random
+    size: 15,
+    speed: 6
 };
 
 /**
  * Creates the canvas and initializes the fly
  */
 function setup() {
-    createCanvas(640, 480);
+    createCanvas(1280, 880);
 
     // Give the fly its first random position
     resetFly();
 }
 
 function draw() {
-    background("#87ceeb");
+    background("#172110ff");
+    drawLeaves(1780, 450, 3, 1.7, -1, 1, "#3b5828ff");
+    drawLeaves(550, 1150, 2.1, -0.1, -1, 1, "#3b5828ff");
+    drawLeaves(-400, 100, 2.5, 1.1, 1, -1, "#3b5828ff");
+    drawLeaves(-250, 150, 2.2, 1.3, 1, -1, "#5e8444ff");
+    drawLeaves(-100, 950, 3, 0.9, 1, 1, "#5e8444ff");
+    drawLeaves(400, 1000, 1.5, -0.8, 1, 1, "#3b5828ff");
+    drawLeaves(490, 1250, 2.7, -0.2, 1, 1, "#96b25fff");
+    drawLeaves(370, -150, 1.75, 0.4, 1, -1, "#96b25fff");
+    drawLeaves(1280, 1250, 2.6, 2.9, -1, -1, "#5e8444ff");
+    drawLeaves(990, 1150, 1.5, -0.1, -1, 1, "#3b5828ff");
+    drawLeaves(780, 1400, 3.2, 0, 1, 1, "#5e8444ff");
+    drawLeaves(1880, 200, 3.5, 1.7, -1, 1, "#5e8444ff");
+    drawLeaves(1050, -400, 2.1, 0.5, -1, -1, "#3b5828ff");
+    drawLeaves(790, 1250, 2.4, 0.3, 1, 1, "#96b25fff");
+    drawLeaves(1880, -100, 3.6, 2.3, -1, 1, "#96b25fff");
+    drawLeaves(1380, -300, 2.8, 2.3, -1, 1, "#96b25fff");
+    
+    
     moveFly();
     drawFly();
     moveFrog();
@@ -64,12 +82,44 @@ function draw() {
 }
 
 /**
+ * Draws the tropical leaves
+ */
+function drawLeaves(x, y, size, angle, flipX, flipY, leafColour) {
+    push();
+    translate(x, y);
+    scale(flipX, flipY);
+    rotate(angle);
+    noStroke();
+    fill(leafColour);   
+  beginShape();
+  curveVertex(0, 20 * size);   // base
+  curveVertex(0, 20 * size);
+  curveVertex(-20 * size, -20 * size);
+  curveVertex(-80 * size, -80 * size);
+  curveVertex(-60 * size, -140 * size);
+  curveVertex(-65 * size, -200 * size);
+  curveVertex(-25 * size, -260 * size);
+  curveVertex(0, -290 * size); // tip
+  curveVertex(25 * size, -260 * size);
+  curveVertex(65 * size, -200 * size);
+  curveVertex(60 * size, -140 * size);
+  curveVertex(80 * size, -80 * size);
+  curveVertex(20 * size, -20 * size);
+  curveVertex(0, 20 * size);
+  curveVertex(0, 20 * size);
+  endShape(CLOSE);
+    pop();
+}
+
+
+/**
  * Moves the fly according to its speed
  * Resets the fly if it gets all the way to the right
  */
 function moveFly() {
     // Move the fly
     fly.x += fly.speed;
+    fly.y += sin(frameCount * 0.3) * 5;
     // Handle the fly going off the canvas
     if (fly.x > width) {
         resetFly();
@@ -77,13 +127,27 @@ function moveFly() {
 }
 
 /**
- * Draws the fly as a black circle
+ * Draws the fly as a black circle with white wings
  */
 function drawFly() {
     push();
     noStroke();
     fill("#000000");
-    ellipse(fly.x, fly.y, fly.size);
+    ellipse(fly.x, fly.y, fly.size +3, fly.size);
+    pop();
+
+    // Draw the fly's wings
+    push();
+    noStroke();
+    fill("#ffffff97");
+    beginShape();
+    curveVertex(fly.x, fly.y); // curve start
+    curveVertex(fly.x - 15, fly.y + 5); // left bulge
+    curveVertex(fly.x - 20, fly.y + 20); // left point
+    curveVertex(fly.x + 20, fly.y + 20); // right point
+    curveVertex(fly.x + 15, fly.y + 5); // right bulge
+    curveVertex(fly.x, fly.y); // curve end
+    endShape(CLOSE);
     pop();
 }
 
@@ -92,7 +156,7 @@ function drawFly() {
  */
 function resetFly() {
     fly.x = 0;
-    fly.y = random(0, 300);
+    fly.y = random(20, 500);
 }
 
 /**
@@ -322,9 +386,9 @@ function drawFrog() {
     push();
     fill("#ddae7cff");
     noStroke();
-    ellipse(frog.body.x - 174, frog.body.y + 27, 19, 23);
-    ellipse(frog.body.x - 218, frog.body.y + 4, 19, 22);
-    ellipse(frog.body.x - 265, frog.body.y + 36, 20, 22);
+    ellipse(frog.body.x - 174, frog.body.y + 27, 19, 23); //right-most
+    ellipse(frog.body.x - 218, frog.body.y + 4, 19, 22); // middle
+    ellipse(frog.body.x - 265, frog.body.y + 36, 20, 22); // left-most
     pop();
 
         //Draw the right toe highlights
@@ -346,9 +410,9 @@ function drawFrog() {
     push();
     fill("#ddae7cff");
     noStroke();
-    ellipse(frog.body.x + 174, frog.body.y + 27, 19, 23);
-    ellipse(frog.body.x + 220, frog.body.y + 4, 19, 22);
-    ellipse(frog.body.x + 265, frog.body.y + 36, 20, 22);
+    ellipse(frog.body.x + 174, frog.body.y + 27, 19, 23); // right-most
+    ellipse(frog.body.x + 220, frog.body.y + 4, 19, 22); // middle
+    ellipse(frog.body.x + 265, frog.body.y + 36, 20, 22); // left-most
     pop();
 }
 
