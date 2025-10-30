@@ -40,8 +40,18 @@ const fly = {
     x: 0,
     y: 400, // Will be random
     size: 15,
-    speed: 6
+    speed: 6,
+
+    wingFlipX: 1,
+    wingFlipY: 1
 };
+
+setInterval(function () {
+    fly.wingFlipX = fly.wingFlipX * -1;
+    fly.wingFlipY = fly.wingFlipY * -1;
+},
+    150
+)
 
 /**
  * Creates the canvas and initializes the fly
@@ -96,23 +106,23 @@ function drawLeaves(x, y, size, angle, flipX, flipY, leafColour) {
     rotate(angle);
     noStroke();
     fill(leafColour);   
-  beginShape();
-  curveVertex(0, 20 * size);   // base
-  curveVertex(0, 20 * size);
-  curveVertex(-20 * size, -20 * size);
-  curveVertex(-80 * size, -80 * size);
-  curveVertex(-60 * size, -140 * size);
-  curveVertex(-65 * size, -200 * size);
-  curveVertex(-25 * size, -260 * size);
-  curveVertex(0, -290 * size); // tip
-  curveVertex(25 * size, -260 * size);
-  curveVertex(65 * size, -200 * size);
-  curveVertex(60 * size, -140 * size);
-  curveVertex(80 * size, -80 * size);
-  curveVertex(20 * size, -20 * size);
-  curveVertex(0, 20 * size);
-  curveVertex(0, 20 * size);
-  endShape(CLOSE);
+    beginShape();
+    curveVertex(0, 20 * size);   // base
+    curveVertex(0, 20 * size);
+    curveVertex(-20 * size, -20 * size);
+    curveVertex(-80 * size, -80 * size);
+    curveVertex(-60 * size, -140 * size);
+    curveVertex(-65 * size, -200 * size);
+    curveVertex(-25 * size, -260 * size);
+    curveVertex(0, -290 * size); // tip
+    curveVertex(25 * size, -260 * size);
+    curveVertex(65 * size, -200 * size);
+    curveVertex(60 * size, -140 * size);
+    curveVertex(80 * size, -80 * size);
+    curveVertex(20 * size, -20 * size);
+    curveVertex(0, 20 * size);
+    curveVertex(0, 20 * size);
+    endShape(CLOSE);
     pop();
 }
 
@@ -145,13 +155,16 @@ function drawFly() {
     push();
     noStroke();
     fill("#ffffff97");
+    translate(fly.x, fly.y);
+    scale(fly.wingFlipX, fly.wingFlipY);
+    
     beginShape();
-    curveVertex(fly.x, fly.y); // curve start
-    curveVertex(fly.x - 15, fly.y + 5); // left bulge
-    curveVertex(fly.x - 20, fly.y + 20); // left point
-    curveVertex(fly.x + 20, fly.y + 20); // right point
-    curveVertex(fly.x + 15, fly.y + 5); // right bulge
-    curveVertex(fly.x, fly.y); // curve end
+    curveVertex(0, 0); // curve start
+    curveVertex(0 - 15, 0 + 5); // left bulge
+    curveVertex(0 - 20, 0 + 20); // left point
+    curveVertex(0 + 20, 0 + 20); // right point
+    curveVertex(0 + 15, 0 + 5); // right bulge
+    curveVertex(0, 0); // curve end
     endShape(CLOSE);
     pop();
 }
