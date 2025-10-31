@@ -34,6 +34,20 @@ const frog = {
     }
 };
 
+// Gluttinous Toad
+let toad = {
+    // Position of toad's body
+    body: {
+        x: 1200,
+        y: 440,
+    },
+    // Dimensions of toad's eyes
+    eyes: {
+        w: 30,
+        h: 55,
+    }
+};
+
 // Our fly
 // Has a position, size, and speed of horizontal movement
 const fly = {
@@ -94,6 +108,7 @@ function draw() {
     moveTongue();
     drawFrog();
     checkTongueFlyOverlap();
+    drawToad();
 }
 
 /**
@@ -337,7 +352,7 @@ function drawFrog() {
     endShape(CLOSE);
     pop();
 
-    //Draw the left toe (hand? paw?)
+    //Draw the left foot
     push();
     fill("#ce8c46ff");
     noStroke();
@@ -361,7 +376,7 @@ function drawFrog() {
     ellipse(frog.body.x - 267, frog.body.y + 36, 24);
     pop();
 
-    //Draw the right toe (hand? paw?)
+    //Draw the right foot
     push();
     fill("#ce8c46ff");
     noStroke();
@@ -385,7 +400,7 @@ function drawFrog() {
     ellipse(frog.body.x + 267, frog.body.y + 36, 24);
     pop();
 
-        //Draw the left toe highlights
+        //Draw the left foot highlights
     push();
     fill("#ddae7cff");
     noStroke();
@@ -409,7 +424,7 @@ function drawFrog() {
     ellipse(frog.body.x - 265, frog.body.y + 36, 20, 22); // left-most
     pop();
 
-        //Draw the right toe highlights
+        //Draw the right foot highlights
     push();
     fill("#ddae7cff");
     noStroke();
@@ -432,6 +447,166 @@ function drawFrog() {
     ellipse(frog.body.x + 220, frog.body.y + 4, 19, 22); // middle
     ellipse(frog.body.x + 265, frog.body.y + 36, 20, 22); // left-most
     pop();
+}
+
+/**
+ * Draws the toad in its entirety
+ */
+function drawToad() {
+
+    // Draws the body
+    push();
+    noStroke();
+    fill("#8b6d21ff");
+    
+    // Allows to scale the width when eating flies
+    let bodyWidth = 1.0;
+    // Rotates the whole toad to be able to easily use the bodywidth from the side of the screen
+    let angle = radians(270);
+
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+
+    // Draws the toad's body
+    beginShape();
+    curveVertex(-150 * bodyWidth, 80);   // Bottom right point (-350 + 200)
+    curveVertex(-140 * bodyWidth, 60);   // (-340 + 200)
+    curveVertex(-110 * bodyWidth, -10);  // (-310 + 200)
+    curveVertex(-70 * bodyWidth, -60);   // (-270 + 200)
+    curveVertex(0 * bodyWidth, -95);    // Middle point (-200 + 200)
+    curveVertex(70 * bodyWidth, -60);    // (-130 + 200)
+    curveVertex(110 * bodyWidth, -10);   // (-90 + 200)
+    curveVertex(140 * bodyWidth, 90);    // (-60 + 200)
+    curveVertex(130 * bodyWidth, 80);    // (-70 + 200)
+    endShape(CLOSE);
+    pop();
+
+    // Draws the toad's body highlight
+    push();
+    noStroke();
+    fill("#b69d5dff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    
+    beginShape();
+    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
+    curveVertex(-130 * bodyWidth, 90);  
+    curveVertex(-90 * bodyWidth, -10);  
+    curveVertex(-40 * bodyWidth, -70);   
+    curveVertex(0 * bodyWidth, -85);    // Middle point
+    curveVertex(40 * bodyWidth, -70);    
+    curveVertex(90 * bodyWidth, -10);   
+    curveVertex(120 * bodyWidth, 90);   
+    curveVertex(150 * bodyWidth, 80);    // Bottom left point
+    endShape(CLOSE);
+    pop();
+
+    // Draws the toad's body spot
+    push();
+    noStroke();
+    fill("#8b6d21ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    
+    beginShape();
+    curveVertex(-70 * bodyWidth, 80);   // Bottom right point   
+    curveVertex(0 * bodyWidth, + 48);    // Middle point
+    curveVertex(70 * bodyWidth, 80);    // Bottom left point
+    endShape(CLOSE);
+    pop();
+
+    // Draws the left eye
+    push();
+    noStroke();
+    fill("#fff");
+    translate(toad.body.x, toad.body.y);
+    rotate(40);
+    ellipse(0 + 40, 0 - 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    pop();
+
+    // Draws the right eye
+    push();
+    noStroke();
+    fill("#fff");
+    translate(toad.body.x, toad.body.y);
+    rotate(4);
+    ellipse(0 + 40, 0 + 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    pop();
+
+    // Draws the toad's right foot
+    push();
+    noStroke();
+    fill("#8b6d21ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    
+    beginShape();
+    curveVertex(210 * bodyWidth, 90); // right left start point
+    curveVertex(215 * bodyWidth, 30); // right-most toe bean
+    curveVertex(198 * bodyWidth, 43); // right and middle webbing
+    curveVertex(180 * bodyWidth, 5); // middle toe bean
+    curveVertex(165 * bodyWidth, 40); // left and middle webbing
+    curveVertex(140 * bodyWidth, 30); // left toe bean
+    curveVertex(165 * bodyWidth, 90); // bottom left start point
+    endShape(CLOSE);
+    pop();
+
+    // Draws the toad's left foot
+    push();
+    noStroke();
+    fill("#8b6d21ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    scale(-1, 1);
+
+    beginShape();
+    curveVertex(210 * bodyWidth, 90); // right left start point
+    curveVertex(215 * bodyWidth, 30); // right-most toe bean
+    curveVertex(198 * bodyWidth, 43); // right and middle webbing
+    curveVertex(180 * bodyWidth, 5); // middle toe bean
+    curveVertex(165 * bodyWidth, 40); // left and middle webbing
+    curveVertex(140 * bodyWidth, 30); // left toe bean
+    curveVertex(165 * bodyWidth, 90); // bottom left start point
+    endShape(CLOSE);
+    pop();
+
+    // Draws the toad's right foot highlight
+    push();
+    noStroke();
+    fill("#b69d5dff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    
+    beginShape();
+    curveVertex(205 * bodyWidth, 90); // right left start point
+    curveVertex(210 * bodyWidth, 60); // right-most toe bean
+    curveVertex(198 * bodyWidth, 55); // right and middle webbing
+    curveVertex(185 * bodyWidth, 25); // middle toe bean
+    curveVertex(175 * bodyWidth, 60); // left and middle webbing
+    curveVertex(150 * bodyWidth, 40); // left toe bean
+    curveVertex(175 * bodyWidth, 90); // bottom left start point
+    endShape(CLOSE);
+    pop();
+
+    // Draws the toad's left foot highlight
+    push();
+    noStroke();
+    fill("#b69d5dff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    scale(-1, 1);
+
+    beginShape();
+    curveVertex(205 * bodyWidth, 90); // right left start point
+    curveVertex(210 * bodyWidth, 40); // right-most toe bean
+    curveVertex(195 * bodyWidth, 55); // right and middle webbing
+    curveVertex(180 * bodyWidth, 15); // middle toe bean
+    curveVertex(169 * bodyWidth, 45); // left and middle webbing
+    curveVertex(148 * bodyWidth, 40); // left toe bean
+    curveVertex(165 * bodyWidth, 90); // bottom left start point
+    endShape(CLOSE);
+    pop();
+    
 }
 
 /**
