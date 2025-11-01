@@ -66,7 +66,7 @@ let originalHeightB = toad.hypnoEyesB.h;
 let hypnoSpeedW = 1.45;
 let hypnoSpeedH = 1.45;
 
-// Enables if statement
+// Boolean for shrinking effect
 let shrinkingW = true;
 let shrinkingH = true;
 
@@ -135,11 +135,30 @@ setInterval(function () {
     150
 );
 
+// Defines title image and font variables
+let titleImage;
+let titleFont;
+
+// Preloads my title image and font
+function preload() {
+    titleImage = loadImage("../assets/images/battleofthebog.png");
+    titleFont = loadFont("../assets/fonts/pixelgame.otf");
+}
+
 /**
- * Creates the canvas and initializes the fly
+ * Creates the canvas
+ * Centers images
+ * Sets global font
+ * Centers the text globally
+ * Initializes the fly
  */
 function setup() {
     createCanvas(1280, 880);
+
+    imageMode(CENTER);
+
+    textFont(titleFont);
+    textAlign(CENTER, CENTER);
 
     // Give the fly its first random position
     resetFly();
@@ -169,7 +188,6 @@ function draw() {
     drawLeaves(1880, -100, 3.6, 2.3, -1, 1, "#96b25fff");
     drawLeaves(1380, -300, 2.8, 2.3, -1, 1, "#96b25fff");
     
-    
     moveFly();
     drawFly();
     moveFrog();
@@ -177,6 +195,7 @@ function draw() {
     drawFrog();
     checkTongueFlyOverlap();
     drawToad();
+    titleScreen();
 }
 
 /**
@@ -754,4 +773,30 @@ function mousePressed() {
     if (frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
+}
+
+// Boolean for text fill hover
+let showText = true;
+
+function titleScreen() {
+    image(titleImage, width / 2, height / 2 - 100);
+
+        // Defines text position
+        let textPlayX = width / 2;
+        let textPlayY = height / 2 + 175;
+        // Mouse detection radius
+        let hoverRadius = 100;
+
+        // Checks distance from mouse to text, displays text when hovering
+        if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
+            fill("#ffdaa3ff");
+            textSize(120);
+            text("PLAY", textPlayX, textPlayY);
+        }
+        // If not, do blinking
+        else if (frameCount % 60 < 30) {
+            fill("#fbb040");
+            textSize(120);
+            text("PLAY", textPlayX, textPlayY);
+        }
 }
