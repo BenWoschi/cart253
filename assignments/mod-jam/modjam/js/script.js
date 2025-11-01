@@ -45,8 +45,76 @@ let toad = {
     eyes: {
         w: 30,
         h: 55,
+    },
+
+    hypnoEyesB: {
+        w: 20,
+        h: 42,
+    },
+
+    hypnoEyesR: {
+        w: 23,
+        h: 45,
     }
 };
+
+// Utilizing variable to more easily access the original width/height
+let originalWidthB = toad.hypnoEyesB.w;
+let originalHeightB = toad.hypnoEyesB.h;
+
+// Helps set the speed for both dimensions
+let hypnoSpeedW = 1.45;
+let hypnoSpeedH = 1.45;
+
+// Enables if statement
+let shrinkingW = true;
+let shrinkingH = true;
+
+// Width animation for black hypno eyes
+// Interval allows for continuous loop
+setInterval(() => {
+    if (shrinkingW) {
+        // Shrinking effect for width
+        toad.hypnoEyesB.w -= hypnoSpeedW;
+        // Stops the width from shrinking once it reaches 0.3x of it's original size
+        if (toad.hypnoEyesB.w <= originalWidthB * 0.3) {
+            toad.hypnoEyesB.w = originalWidthB * 0.3;
+            shrinkingW = false;
+        }
+        // Expands the eye back to its original width once it reaches its minimum
+    } else {
+        toad.hypnoEyesB.w += hypnoSpeedW;
+        if (toad.hypnoEyesB.w >= originalWidthB) {
+            toad.hypnoEyesB.w = originalWidthB;
+            shrinkingW = true;
+        }
+    }
+},
+    40);
+
+// Height animation for black hypno eyes
+// Interval allows for continuous loop
+setInterval(() => {
+    if (shrinkingH) {
+        // Shrinking effect for height
+        toad.hypnoEyesB.h -= hypnoSpeedH;
+        // Stops the height from shrinking once it reaches 0.3x of it's original size
+        if (toad.hypnoEyesB.h <= originalHeightB * 0.3) {
+            toad.hypnoEyesB.h = originalHeightB * 0.3;
+            shrinkingH = false;
+        }
+        // Expands the eye back to its original height once it reaches its minimum
+    } else {
+        toad.hypnoEyesB.h += hypnoSpeedH;
+        if (toad.hypnoEyesB.h >= originalHeightB) {
+            toad.hypnoEyesB.h = originalHeightB;
+            shrinkingH = true;
+        }
+    }
+},
+    40);
+
+
 
 // Our fly
 // Has a position, size, and speed of horizontal movement
@@ -65,7 +133,7 @@ setInterval(function () {
     fly.wingFlipY = fly.wingFlipY * -1;
 },
     150
-)
+);
 
 /**
  * Creates the canvas and initializes the fly
@@ -515,10 +583,28 @@ function drawToad() {
     endShape(CLOSE);
     pop();
 
+    // Draws the left eye back
+    push();
+    noStroke();
+    fill("#8b6d21ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(40);
+    ellipse(0 + 35, 0 - 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    pop();
+
+    // Draws the right eye back
+    push();
+    noStroke();
+    fill("#8b6d21ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(4);
+    ellipse(0 + 35, 0 + 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    pop();
+
     // Draws the left eye
     push();
     noStroke();
-    fill("#fff");
+    fill("#c3da30ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
     ellipse(0 + 40, 0 - 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
@@ -527,10 +613,46 @@ function drawToad() {
     // Draws the right eye
     push();
     noStroke();
-    fill("#fff");
+    fill("#c3da30ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
     ellipse(0 + 40, 0 + 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    pop();
+
+    // Draws the left hypno RED eye
+    push();
+    noStroke();
+    fill("#ac2601ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(40);
+    ellipse(0 + 40, 0 - 20, toad.hypnoEyesR.w * bodyWidth, toad.hypnoEyesR.h * bodyWidth);
+    pop();
+
+    // Draws the right hypno RED eye
+    push();
+    noStroke();
+    fill("#ac2601ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(4);
+    ellipse(0 + 40, 0 + 20, toad.hypnoEyesR.w * bodyWidth, toad.hypnoEyesR.h * bodyWidth);
+    pop();
+
+    // Draws the left hypno BLACK eye
+    push();
+    noStroke();
+    fill("#000000ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(40);
+    ellipse(0 + 40, 0 - 20, toad.hypnoEyesB.w * bodyWidth, toad.hypnoEyesB.h * bodyWidth);
+    pop();
+
+    // Draws the right hypno BLACK eye
+    push();
+    noStroke();
+    fill("#000000ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(4);
+    ellipse(0 + 40, 0 + 20, toad.hypnoEyesB.w * bodyWidth, toad.hypnoEyesB.h * bodyWidth);
     pop();
 
     // Draws the toad's right foot
