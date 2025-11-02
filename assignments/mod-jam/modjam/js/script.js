@@ -46,17 +46,20 @@ let toad = {
         w: 30,
         h: 55,
     },
-
+    // Dimensions of black hypno toad's eyes
     hypnoEyesB: {
         w: 20,
         h: 42,
     },
-
+    // Dimensions of red hypno toad's eyes
     hypnoEyesR: {
         w: 23,
         h: 45,
     }
 };
+
+// Boolean for game start
+let gameStart = false;
 
 // Utilizing variable to more easily access the original width/height
 let originalWidthB = toad.hypnoEyesB.w;
@@ -188,14 +191,18 @@ function draw() {
     drawLeaves(1880, -100, 3.6, 2.3, -1, 1, "#96b25fff");
     drawLeaves(1380, -300, 2.8, 2.3, -1, 1, "#96b25fff");
     
-    moveFly();
-    drawFly();
-    moveFrog();
-    moveTongue();
-    drawFrog();
-    checkTongueFlyOverlap();
-    drawToad();
-    titleScreen();
+    // Draws all the other objects if the game starts
+    if (gameStart) {
+        moveFly();
+        drawFly();
+        moveFrog();
+        moveTongue();
+        drawFrog();
+        checkTongueFlyOverlap();
+        drawToad();
+    } else {
+        titleScreen();
+    }      
 }
 
 /**
@@ -767,11 +774,24 @@ function checkTongueFlyOverlap() {
 }
 
 /**
- * Launch the tongue on click (if it's not launched yet)
+ * Starts the game when mouse is pressed over "PLAY"
  */
 function mousePressed() {
-    if (frog.tongue.state === "idle") {
-        frog.tongue.state = "outbound";
+    if (!gameStart) {
+        // Check if mouse is over "PLAY" text
+        let textPlayX = width / 2;
+        let textPlayY = height / 2 + 175;
+        let hoverRadius = 100;
+
+        if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
+            // Starts the game
+            gameStart = true;
+        }
+    } else {
+        // Launches tongue only when the game is running
+        if (frog.tongue.state === "idle") {
+            frog.tongue.state = "outbound";
+        }
     }
 }
 
