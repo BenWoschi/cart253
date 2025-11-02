@@ -55,12 +55,14 @@ let toad = {
     hypnoEyesR: {
         w: 23,
         h: 45,
-    },
-
-    toadMouth: {
-        size: 75,
     }
 };
+
+// Allows to scale the width when eating flies
+let bodyWidthToad = 1.0;
+
+// Allows for eye separation as toad gets wider
+let eyeDisplacementY = 0;
 
 // Boolean for game start
 let gameStart = false;
@@ -194,7 +196,7 @@ function draw() {
     drawLeaves(1380, -300, 2.8, 2.3, -1, 1, "#96b25fff");
     
     // Draws all the other objects if the game starts
-   // if (gameStart) {
+    if (gameStart) {
         moveFly();
         drawFly();
         moveFrog();
@@ -202,9 +204,10 @@ function draw() {
         drawFrog();
         checkTongueFlyOverlap();
         drawToad();
-   // } else {
+        checkFlyToadOverlap();
+    } else {
         titleScreen();
-  //  }      
+    }      
 }
 
 /**
@@ -552,19 +555,8 @@ function drawFrog() {
  */
 function drawToad() {
 
-    // Allows to scale the width when eating flies
-    let bodyWidth = 1.0;
-    // Allows for foot displacement as toad gets wider
-    let feetDisplacement = 0;
     // Rotates the whole toad to be able to easily use the bodywidth from the side of the screen
     let angle = radians(270);
-
-    // Draw ellipse under toad mouth for fly detection
-    push();
-    fill("#000000ff");
-    noStroke();
-    ellipse(toad.body.x - 50, toad.body.y, toad.toadMouth.size * bodyWidth);
-    pop();
 
     // Draws the toad's mouth
     push();
@@ -574,15 +566,15 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
-    curveVertex(-130 * bodyWidth, 90);  
-    curveVertex(-95 * bodyWidth, -25);  
-    curveVertex(-40 * bodyWidth, -85);   
-    curveVertex(0 * bodyWidth, -100);    // Middle point
-    curveVertex(40 * bodyWidth, -85);    
-    curveVertex(95 * bodyWidth, -25);   
-    curveVertex(120 * bodyWidth, 90);   
-    curveVertex(150 * bodyWidth, 80);    // Bottom left point
+    curveVertex(-150 * bodyWidthToad, 80);   // Bottom right point
+    curveVertex(-130 * bodyWidthToad, 90);  
+    curveVertex(-95 * bodyWidthToad, -25);  
+    curveVertex(-40 * bodyWidthToad, -85);   
+    curveVertex(0 * bodyWidthToad, -100);    // Middle point
+    curveVertex(40 * bodyWidthToad, -85);    
+    curveVertex(95 * bodyWidthToad, -25);   
+    curveVertex(120 * bodyWidthToad, 90);   
+    curveVertex(150 * bodyWidthToad, 80);    // Bottom left point
     endShape(CLOSE);
     pop();
 
@@ -594,15 +586,15 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
-    curveVertex(-130 * bodyWidth, 90);  
-    curveVertex(-95 * bodyWidth, -25);  
-    curveVertex(-40 * bodyWidth, -80);   
-    curveVertex(0 * bodyWidth, -95);    // Middle point
-    curveVertex(40 * bodyWidth, -80);    
-    curveVertex(95 * bodyWidth, -25);   
-    curveVertex(120 * bodyWidth, 90);   
-    curveVertex(150 * bodyWidth, 80);    // Bottom left point
+    curveVertex(-150 * bodyWidthToad, 80);   // Bottom right point
+    curveVertex(-130 * bodyWidthToad, 90);  
+    curveVertex(-95 * bodyWidthToad, -25);  
+    curveVertex(-40 * bodyWidthToad, -80);   
+    curveVertex(0 * bodyWidthToad, -95);    // Middle point
+    curveVertex(40 * bodyWidthToad, -80);    
+    curveVertex(95 * bodyWidthToad, -25);   
+    curveVertex(120 * bodyWidthToad, 90);   
+    curveVertex(150 * bodyWidthToad, 80);    // Bottom left point
     endShape(CLOSE);
     pop();
 
@@ -615,15 +607,15 @@ function drawToad() {
 
     // Draws the toad's body
     beginShape();
-    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
-    curveVertex(-140 * bodyWidth, 60);
-    curveVertex(-110 * bodyWidth, -5);
-    curveVertex(-70 * bodyWidth, -55);
-    curveVertex(0 * bodyWidth, -80);    // Middle point
-    curveVertex(70 * bodyWidth, -55);
-    curveVertex(110 * bodyWidth, -5);
-    curveVertex(140 * bodyWidth, 90);
-    curveVertex(130 * bodyWidth, 80);    // Bottom left point
+    curveVertex(-150 * bodyWidthToad, 80);   // Bottom right point
+    curveVertex(-140 * bodyWidthToad, 60);
+    curveVertex(-110 * bodyWidthToad, -5);
+    curveVertex(-70 * bodyWidthToad, -55);
+    curveVertex(0 * bodyWidthToad, -80);    // Middle point
+    curveVertex(70 * bodyWidthToad, -55);
+    curveVertex(110 * bodyWidthToad, -5);
+    curveVertex(140 * bodyWidthToad, 90);
+    curveVertex(130 * bodyWidthToad, 80);    // Bottom left point
     endShape(CLOSE);
     pop();
 
@@ -635,15 +627,15 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
-    curveVertex(-130 * bodyWidth, 90);  
-    curveVertex(-90 * bodyWidth, -5);  
-    curveVertex(-40 * bodyWidth, -65);   
-    curveVertex(0 * bodyWidth, -77);    // Middle point
-    curveVertex(40 * bodyWidth, -65);    
-    curveVertex(90 * bodyWidth, -5);   
-    curveVertex(120 * bodyWidth, 90);   
-    curveVertex(150 * bodyWidth, 80);    // Bottom left point
+    curveVertex(-150 * bodyWidthToad, 80);   // Bottom right point
+    curveVertex(-130 * bodyWidthToad, 90);  
+    curveVertex(-90 * bodyWidthToad, -5);  
+    curveVertex(-40 * bodyWidthToad, -65);   
+    curveVertex(0 * bodyWidthToad, -77);    // Middle point
+    curveVertex(40 * bodyWidthToad, -65);    
+    curveVertex(90 * bodyWidthToad, -5);   
+    curveVertex(120 * bodyWidthToad, 90);   
+    curveVertex(150 * bodyWidthToad, 80);    // Bottom left point
     endShape(CLOSE);
     pop();
 
@@ -655,9 +647,9 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(-70 * bodyWidth, 80);   // Bottom right point   
-    curveVertex(0 * bodyWidth, + 48);    // Middle point
-    curveVertex(70 * bodyWidth, 80);    // Bottom left point
+    curveVertex(-70 * bodyWidthToad, 80);   // Bottom right point   
+    curveVertex(0 * bodyWidthToad, + 48);    // Middle point
+    curveVertex(70 * bodyWidthToad, 80);    // Bottom left point
     endShape(CLOSE);
     pop();
 
@@ -667,7 +659,7 @@ function drawToad() {
     fill("#8b6d21ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 35, 0 - 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    ellipse(0 + 35, 0 - (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the right eye back
@@ -676,7 +668,7 @@ function drawToad() {
     fill("#8b6d21ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 35, 0 + 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    ellipse(0 + 35, 0 + (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the left eye
@@ -685,7 +677,7 @@ function drawToad() {
     fill("#c3da30ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 40, 0 - 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the right eye
@@ -694,7 +686,7 @@ function drawToad() {
     fill("#c3da30ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 40, 0 + 20, toad.eyes.w * bodyWidth, toad.eyes.h * bodyWidth);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the left hypno RED eye
@@ -703,7 +695,7 @@ function drawToad() {
     fill("#ac2601ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 40, 0 - 20, toad.hypnoEyesR.w * bodyWidth, toad.hypnoEyesR.h * bodyWidth);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementY), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
     pop();
 
     // Draws the right hypno RED eye
@@ -712,7 +704,7 @@ function drawToad() {
     fill("#ac2601ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 40, 0 + 20, toad.hypnoEyesR.w * bodyWidth, toad.hypnoEyesR.h * bodyWidth);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementY), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
     pop();
 
     // Draws the left hypno BLACK eye
@@ -721,7 +713,7 @@ function drawToad() {
     fill("#000000ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 40, 0 - 20, toad.hypnoEyesB.w * bodyWidth, toad.hypnoEyesB.h * bodyWidth);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementY), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
     pop();
 
     // Draws the right hypno BLACK eye
@@ -730,7 +722,7 @@ function drawToad() {
     fill("#000000ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 40, 0 + 20, toad.hypnoEyesB.w * bodyWidth, toad.hypnoEyesB.h * bodyWidth);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementY), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
     pop();
 
     // Draws the toad's right foot
@@ -741,13 +733,13 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(210 * bodyWidth + feetDisplacement, 90); // right left start point
-    curveVertex(215 * bodyWidth + feetDisplacement, 30); // right-most toe bean
-    curveVertex(198 * bodyWidth + feetDisplacement, 43); // right and middle webbing
-    curveVertex(180 * bodyWidth + feetDisplacement, 5); // middle toe bean
-    curveVertex(165 * bodyWidth + feetDisplacement, 40); // left and middle webbing
-    curveVertex(140 * bodyWidth + feetDisplacement, 30); // left toe bean
-    curveVertex(165 * bodyWidth + feetDisplacement, 90); // bottom left start point
+    curveVertex(210 * bodyWidthToad, 90); // right left start point
+    curveVertex(215 * bodyWidthToad, 30); // right-most toe bean
+    curveVertex(198 * bodyWidthToad, 43); // right and middle webbing
+    curveVertex(180 * bodyWidthToad, 5); // middle toe bean
+    curveVertex(165 * bodyWidthToad, 40); // left and middle webbing
+    curveVertex(140 * bodyWidthToad, 30); // left toe bean
+    curveVertex(165 * bodyWidthToad, 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -760,13 +752,13 @@ function drawToad() {
     scale(-1, 1);
 
     beginShape();
-    curveVertex(210 * bodyWidth + feetDisplacement, 90); // right left start point
-    curveVertex(215 * bodyWidth + feetDisplacement, 30); // right-most toe bean
-    curveVertex(198 * bodyWidth + feetDisplacement, 43); // right and middle webbing
-    curveVertex(180 * bodyWidth + feetDisplacement, 5); // middle toe bean
-    curveVertex(165 * bodyWidth + feetDisplacement, 40); // left and middle webbing
-    curveVertex(140 * bodyWidth + feetDisplacement, 30); // left toe bean
-    curveVertex(165 * bodyWidth + feetDisplacement, 90); // bottom left start point
+    curveVertex(210 * bodyWidthToad, 90); // right left start point
+    curveVertex(215 * bodyWidthToad, 30); // right-most toe bean
+    curveVertex(198 * bodyWidthToad, 43); // right and middle webbing
+    curveVertex(180 * bodyWidthToad, 5); // middle toe bean
+    curveVertex(165 * bodyWidthToad, 40); // left and middle webbing
+    curveVertex(140 * bodyWidthToad, 30); // left toe bean
+    curveVertex(165 * bodyWidthToad, 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -778,13 +770,13 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(205 * bodyWidth + feetDisplacement, 90); // right left start point
-    curveVertex(210 * bodyWidth + feetDisplacement, 60); // right-most toe bean
-    curveVertex(198 * bodyWidth + feetDisplacement, 55); // right and middle webbing
-    curveVertex(185 * bodyWidth + feetDisplacement, 25); // middle toe bean
-    curveVertex(175 * bodyWidth + feetDisplacement, 60); // left and middle webbing
-    curveVertex(150 * bodyWidth + feetDisplacement, 40); // left toe bean
-    curveVertex(175 * bodyWidth + feetDisplacement, 90); // bottom left start point
+    curveVertex(205 * bodyWidthToad, 90); // right left start point
+    curveVertex(210 * bodyWidthToad, 60); // right-most toe bean
+    curveVertex(198 * bodyWidthToad, 55); // right and middle webbing
+    curveVertex(185 * bodyWidthToad, 25); // middle toe bean
+    curveVertex(175 * bodyWidthToad, 60); // left and middle webbing
+    curveVertex(150 * bodyWidthToad, 40); // left toe bean
+    curveVertex(175 * bodyWidthToad, 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -797,13 +789,13 @@ function drawToad() {
     scale(-1, 1);
 
     beginShape();
-    curveVertex(205 * bodyWidth + feetDisplacement, 90); // right left start point
-    curveVertex(210 * bodyWidth + feetDisplacement, 40); // right-most toe bean
-    curveVertex(195 * bodyWidth + feetDisplacement, 55); // right and middle webbing
-    curveVertex(180 * bodyWidth + feetDisplacement, 15); // middle toe bean
-    curveVertex(169 * bodyWidth + feetDisplacement, 45); // left and middle webbing
-    curveVertex(148 * bodyWidth + feetDisplacement, 40); // left toe bean
-    curveVertex(165 * bodyWidth + feetDisplacement, 90); // bottom left start point
+    curveVertex(205 * bodyWidthToad, 90); // right left start point
+    curveVertex(210 * bodyWidthToad, 40); // right-most toe bean
+    curveVertex(195 * bodyWidthToad, 55); // right and middle webbing
+    curveVertex(180 * bodyWidthToad, 15); // middle toe bean
+    curveVertex(169 * bodyWidthToad, 45); // left and middle webbing
+    curveVertex(148 * bodyWidthToad, 40); // left toe bean
+    curveVertex(165 * bodyWidthToad, 90); // bottom left start point
     endShape(CLOSE);
     pop();
     
@@ -824,6 +816,31 @@ function checkTongueFlyOverlap() {
         frog.tongue.state = "inbound";
     }
 }
+
+/**
+ * Handles the fly overlapping the toad's mouth
+ */
+function checkFlyToadOverlap() {
+    let mouthX = toad.body.x - 50;
+    let mouthY = toad.body.y;
+    let mouthToadRadius = (75 * bodyWidthToad) / 2;
+    let flyRadius = fly.size / 2;
+
+    // Distance between fly and toad mouth
+    let flyMouthDistance = dist(fly.x, fly.y, mouthX, mouthY);
+
+    if (flyMouthDistance < mouthToadRadius + flyRadius) {
+        // Respawn the fly
+        resetFly();
+        // Increase toad's size
+        bodyWidthToad += 0.04;
+        // Moves eyes apart on Y axis
+        eyeDisplacementY += 5;
+        // Cap the size increase
+        bodyWidthToad = constrain(bodyWidthToad, 1, 1.20);
+    }
+}
+
 
 /**
  * Starts the game when mouse is pressed over "PLAY"
