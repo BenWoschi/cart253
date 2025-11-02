@@ -55,6 +55,10 @@ let toad = {
     hypnoEyesR: {
         w: 23,
         h: 45,
+    },
+
+    toadMouth: {
+        size: 75,
     }
 };
 
@@ -116,8 +120,6 @@ setInterval(() => {
     }
 },
     40);
-
-
 
 // Our fly
 // Has a position, size, and speed of horizontal movement
@@ -192,7 +194,7 @@ function draw() {
     drawLeaves(1380, -300, 2.8, 2.3, -1, 1, "#96b25fff");
     
     // Draws all the other objects if the game starts
-    if (gameStart) {
+   // if (gameStart) {
         moveFly();
         drawFly();
         moveFrog();
@@ -200,9 +202,9 @@ function draw() {
         drawFrog();
         checkTongueFlyOverlap();
         drawToad();
-    } else {
+   // } else {
         titleScreen();
-    }      
+  //  }      
 }
 
 /**
@@ -230,7 +232,7 @@ function drawLeaves(x, y, size, angle, flipX, flipY, leafColour) {
     curveVertex(80 * size, -80 * size);
     curveVertex(20 * size, -20 * size);
     curveVertex(0, 20 * size);
-    curveVertex(0, 20 * size);
+    curveVertex(0, 20 * size); // base
     endShape(CLOSE);
     pop();
 }
@@ -279,11 +281,12 @@ function drawFly() {
 }
 
 /**
- * Resets the fly to the left with a random y
+ * Resets the fly to the left with a random y and speed
  */
 function resetFly() {
     fly.x = 0;
     fly.y = random(20, 500);
+    fly.speed = random(5, 12);
 }
 
 /**
@@ -325,6 +328,7 @@ function moveTongue() {
  * Displays the tongue (tip and line connection) and the frog (body)
  */
 function drawFrog() {
+
     // Draw the tongue tip
     push();
     fill("#d98998ff");
@@ -494,7 +498,7 @@ function drawFrog() {
     ellipse(frog.body.x + 267, frog.body.y + 36, 24);
     pop();
 
-        //Draw the left foot highlights
+    //Draw the left foot highlights
     push();
     fill("#ddae7cff");
     noStroke();
@@ -518,7 +522,7 @@ function drawFrog() {
     ellipse(frog.body.x - 265, frog.body.y + 36, 20, 22); // left-most
     pop();
 
-        //Draw the right foot highlights
+    //Draw the right foot highlights
     push();
     fill("#ddae7cff");
     noStroke();
@@ -548,30 +552,78 @@ function drawFrog() {
  */
 function drawToad() {
 
+    // Allows to scale the width when eating flies
+    let bodyWidth = 1.0;
+    // Allows for foot displacement as toad gets wider
+    let feetDisplacement = 0;
+    // Rotates the whole toad to be able to easily use the bodywidth from the side of the screen
+    let angle = radians(270);
+
+    // Draw ellipse under toad mouth for fly detection
+    push();
+    fill("#000000ff");
+    noStroke();
+    ellipse(toad.body.x - 50, toad.body.y, toad.toadMouth.size * bodyWidth);
+    pop();
+
+    // Draws the toad's mouth
+    push();
+    noStroke();
+    fill("#b65d85ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    
+    beginShape();
+    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
+    curveVertex(-130 * bodyWidth, 90);  
+    curveVertex(-95 * bodyWidth, -25);  
+    curveVertex(-40 * bodyWidth, -85);   
+    curveVertex(0 * bodyWidth, -100);    // Middle point
+    curveVertex(40 * bodyWidth, -85);    
+    curveVertex(95 * bodyWidth, -25);   
+    curveVertex(120 * bodyWidth, 90);   
+    curveVertex(150 * bodyWidth, 80);    // Bottom left point
+    endShape(CLOSE);
+    pop();
+
+    // Draws the toad's mouth shadow
+    push();
+    noStroke();
+    fill("#742649ff");
+    translate(toad.body.x, toad.body.y);
+    rotate(angle);
+    
+    beginShape();
+    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
+    curveVertex(-130 * bodyWidth, 90);  
+    curveVertex(-95 * bodyWidth, -25);  
+    curveVertex(-40 * bodyWidth, -80);   
+    curveVertex(0 * bodyWidth, -95);    // Middle point
+    curveVertex(40 * bodyWidth, -80);    
+    curveVertex(95 * bodyWidth, -25);   
+    curveVertex(120 * bodyWidth, 90);   
+    curveVertex(150 * bodyWidth, 80);    // Bottom left point
+    endShape(CLOSE);
+    pop();
+
     // Draws the body
     push();
     noStroke();
     fill("#8b6d21ff");
-    
-    // Allows to scale the width when eating flies
-    let bodyWidth = 1.0;
-    // Rotates the whole toad to be able to easily use the bodywidth from the side of the screen
-    let angle = radians(270);
-
     translate(toad.body.x, toad.body.y);
     rotate(angle);
 
     // Draws the toad's body
     beginShape();
-    curveVertex(-150 * bodyWidth, 80);   // Bottom right point (-350 + 200)
-    curveVertex(-140 * bodyWidth, 60);   // (-340 + 200)
-    curveVertex(-110 * bodyWidth, -10);  // (-310 + 200)
-    curveVertex(-70 * bodyWidth, -60);   // (-270 + 200)
-    curveVertex(0 * bodyWidth, -95);    // Middle point (-200 + 200)
-    curveVertex(70 * bodyWidth, -60);    // (-130 + 200)
-    curveVertex(110 * bodyWidth, -10);   // (-90 + 200)
-    curveVertex(140 * bodyWidth, 90);    // (-60 + 200)
-    curveVertex(130 * bodyWidth, 80);    // (-70 + 200)
+    curveVertex(-150 * bodyWidth, 80);   // Bottom right point
+    curveVertex(-140 * bodyWidth, 60);
+    curveVertex(-110 * bodyWidth, -5);
+    curveVertex(-70 * bodyWidth, -55);
+    curveVertex(0 * bodyWidth, -80);    // Middle point
+    curveVertex(70 * bodyWidth, -55);
+    curveVertex(110 * bodyWidth, -5);
+    curveVertex(140 * bodyWidth, 90);
+    curveVertex(130 * bodyWidth, 80);    // Bottom left point
     endShape(CLOSE);
     pop();
 
@@ -585,11 +637,11 @@ function drawToad() {
     beginShape();
     curveVertex(-150 * bodyWidth, 80);   // Bottom right point
     curveVertex(-130 * bodyWidth, 90);  
-    curveVertex(-90 * bodyWidth, -10);  
-    curveVertex(-40 * bodyWidth, -70);   
-    curveVertex(0 * bodyWidth, -85);    // Middle point
-    curveVertex(40 * bodyWidth, -70);    
-    curveVertex(90 * bodyWidth, -10);   
+    curveVertex(-90 * bodyWidth, -5);  
+    curveVertex(-40 * bodyWidth, -65);   
+    curveVertex(0 * bodyWidth, -77);    // Middle point
+    curveVertex(40 * bodyWidth, -65);    
+    curveVertex(90 * bodyWidth, -5);   
     curveVertex(120 * bodyWidth, 90);   
     curveVertex(150 * bodyWidth, 80);    // Bottom left point
     endShape(CLOSE);
@@ -689,13 +741,13 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(210 * bodyWidth, 90); // right left start point
-    curveVertex(215 * bodyWidth, 30); // right-most toe bean
-    curveVertex(198 * bodyWidth, 43); // right and middle webbing
-    curveVertex(180 * bodyWidth, 5); // middle toe bean
-    curveVertex(165 * bodyWidth, 40); // left and middle webbing
-    curveVertex(140 * bodyWidth, 30); // left toe bean
-    curveVertex(165 * bodyWidth, 90); // bottom left start point
+    curveVertex(210 * bodyWidth + feetDisplacement, 90); // right left start point
+    curveVertex(215 * bodyWidth + feetDisplacement, 30); // right-most toe bean
+    curveVertex(198 * bodyWidth + feetDisplacement, 43); // right and middle webbing
+    curveVertex(180 * bodyWidth + feetDisplacement, 5); // middle toe bean
+    curveVertex(165 * bodyWidth + feetDisplacement, 40); // left and middle webbing
+    curveVertex(140 * bodyWidth + feetDisplacement, 30); // left toe bean
+    curveVertex(165 * bodyWidth + feetDisplacement, 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -708,13 +760,13 @@ function drawToad() {
     scale(-1, 1);
 
     beginShape();
-    curveVertex(210 * bodyWidth, 90); // right left start point
-    curveVertex(215 * bodyWidth, 30); // right-most toe bean
-    curveVertex(198 * bodyWidth, 43); // right and middle webbing
-    curveVertex(180 * bodyWidth, 5); // middle toe bean
-    curveVertex(165 * bodyWidth, 40); // left and middle webbing
-    curveVertex(140 * bodyWidth, 30); // left toe bean
-    curveVertex(165 * bodyWidth, 90); // bottom left start point
+    curveVertex(210 * bodyWidth + feetDisplacement, 90); // right left start point
+    curveVertex(215 * bodyWidth + feetDisplacement, 30); // right-most toe bean
+    curveVertex(198 * bodyWidth + feetDisplacement, 43); // right and middle webbing
+    curveVertex(180 * bodyWidth + feetDisplacement, 5); // middle toe bean
+    curveVertex(165 * bodyWidth + feetDisplacement, 40); // left and middle webbing
+    curveVertex(140 * bodyWidth + feetDisplacement, 30); // left toe bean
+    curveVertex(165 * bodyWidth + feetDisplacement, 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -726,13 +778,13 @@ function drawToad() {
     rotate(angle);
     
     beginShape();
-    curveVertex(205 * bodyWidth, 90); // right left start point
-    curveVertex(210 * bodyWidth, 60); // right-most toe bean
-    curveVertex(198 * bodyWidth, 55); // right and middle webbing
-    curveVertex(185 * bodyWidth, 25); // middle toe bean
-    curveVertex(175 * bodyWidth, 60); // left and middle webbing
-    curveVertex(150 * bodyWidth, 40); // left toe bean
-    curveVertex(175 * bodyWidth, 90); // bottom left start point
+    curveVertex(205 * bodyWidth + feetDisplacement, 90); // right left start point
+    curveVertex(210 * bodyWidth + feetDisplacement, 60); // right-most toe bean
+    curveVertex(198 * bodyWidth + feetDisplacement, 55); // right and middle webbing
+    curveVertex(185 * bodyWidth + feetDisplacement, 25); // middle toe bean
+    curveVertex(175 * bodyWidth + feetDisplacement, 60); // left and middle webbing
+    curveVertex(150 * bodyWidth + feetDisplacement, 40); // left toe bean
+    curveVertex(175 * bodyWidth + feetDisplacement, 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -745,13 +797,13 @@ function drawToad() {
     scale(-1, 1);
 
     beginShape();
-    curveVertex(205 * bodyWidth, 90); // right left start point
-    curveVertex(210 * bodyWidth, 40); // right-most toe bean
-    curveVertex(195 * bodyWidth, 55); // right and middle webbing
-    curveVertex(180 * bodyWidth, 15); // middle toe bean
-    curveVertex(169 * bodyWidth, 45); // left and middle webbing
-    curveVertex(148 * bodyWidth, 40); // left toe bean
-    curveVertex(165 * bodyWidth, 90); // bottom left start point
+    curveVertex(205 * bodyWidth + feetDisplacement, 90); // right left start point
+    curveVertex(210 * bodyWidth + feetDisplacement, 40); // right-most toe bean
+    curveVertex(195 * bodyWidth + feetDisplacement, 55); // right and middle webbing
+    curveVertex(180 * bodyWidth + feetDisplacement, 15); // middle toe bean
+    curveVertex(169 * bodyWidth + feetDisplacement, 45); // left and middle webbing
+    curveVertex(148 * bodyWidth + feetDisplacement, 40); // left toe bean
+    curveVertex(165 * bodyWidth + feetDisplacement, 90); // bottom left start point
     endShape(CLOSE);
     pop();
     
