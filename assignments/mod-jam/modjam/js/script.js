@@ -60,9 +60,11 @@ let toad = {
 
 // Allows to scale the width when eating flies
 let bodyWidthToad = 1.0;
+let bodyWidthFrog = 1.0;
 
-// Allows for eye separation as toad gets wider
-let eyeDisplacementY = 0;
+// Allows for eye separation as toad and frog gets wider
+let eyeDisplacementT = 0;
+let eyeDisplacementF = 0;
 
 // Boolean for game start
 let gameStart = false;
@@ -198,6 +200,7 @@ function draw() {
     // Draws all the other objects if the game starts
     if (gameStart) {
         moveFly();
+        lightGradient();
         drawFly();
         moveFrog();
         moveTongue();
@@ -293,6 +296,26 @@ function resetFly() {
 }
 
 /**
+ * Adds a gradient light effect for a fly under a hypno effect
+ */
+function lightGradient() {
+    push();
+
+    let lightRadius = 55;
+    let innerCol = color("#e2ba54ff");
+    let outerCol = color("#e4cb8dff");
+
+    for (let r = lightRadius; r > 0; r--) {
+        let m = map(r, 0, lightRadius, 0, 1);
+        let c = lerpColor(innerCol, outerCol, m);
+        let a = map(r, lightRadius, 0, 0, 15);
+        fill(c.levels[0], c.levels[1], c.levels[2], a);
+        ellipse(fly.x, fly.y, r * 1.5, r * 1.5);
+    }
+    pop();
+}
+
+/**
  * Moves the frog to the mouse position on x
  */
 function moveFrog() {
@@ -351,15 +374,15 @@ function drawFrog() {
     fill("#32af5cff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x - 105, frog.body.y + 60);  // curve start
-    curveVertex(frog.body.x - 115, frog.body.y + 60);  // bottom-left hip
-    curveVertex(frog.body.x - 95, frog.body.y - 10);   // left side bulge
-    curveVertex(frog.body.x - 55, frog.body.y - 60);   // upper-left shoulder
+    curveVertex(frog.body.x - 105 * bodyWidthFrog, frog.body.y + 60);  // curve start
+    curveVertex(frog.body.x - 115 * bodyWidthFrog, frog.body.y + 60);  // bottom-left hip
+    curveVertex(frog.body.x - 95 * bodyWidthFrog, frog.body.y - 10);   // left side bulge
+    curveVertex(frog.body.x - 55 * bodyWidthFrog, frog.body.y - 60);   // upper-left shoulder
     curveVertex(frog.body.x, frog.body.y - 100);        // top center (head area)    
-    curveVertex(frog.body.x + 55, frog.body.y - 60);   // upper-right shoulder
-    curveVertex(frog.body.x + 95, frog.body.y - 10);   // right side bulge
-    curveVertex(frog.body.x + 115, frog.body.y + 60);  // bottom-right hip
-    curveVertex(frog.body.x + 105, frog.body.y + 60);  // curve end
+    curveVertex(frog.body.x + 55 * bodyWidthFrog, frog.body.y - 60);   // upper-right shoulder
+    curveVertex(frog.body.x + 95 * bodyWidthFrog, frog.body.y - 10);   // right side bulge
+    curveVertex(frog.body.x + 115 * bodyWidthFrog, frog.body.y + 60);  // bottom-right hip
+    curveVertex(frog.body.x + 105 * bodyWidthFrog, frog.body.y + 60);  // curve end
     endShape(CLOSE);
     pop();
 
@@ -368,15 +391,15 @@ function drawFrog() {
     fill("#94e5afff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x - 100, frog.body.y + 60);  // duplicate for curve start
-    curveVertex(frog.body.x - 115, frog.body.y + 60);  // bottom-left hip
-    curveVertex(frog.body.x - 70, frog.body.y + 10);   // left side bulge
-    curveVertex(frog.body.x - 60, frog.body.y - 40);   // upper-left shoulder
+    curveVertex(frog.body.x - 100 * bodyWidthFrog, frog.body.y + 60);  // duplicate for curve start
+    curveVertex(frog.body.x - 115 * bodyWidthFrog, frog.body.y + 60);  // bottom-left hip
+    curveVertex(frog.body.x - 70 * bodyWidthFrog, frog.body.y + 10);   // left side bulge
+    curveVertex(frog.body.x - 60 * bodyWidthFrog, frog.body.y - 40);   // upper-left shoulder
     curveVertex(frog.body.x, frog.body.y - 85);        // top center (head area)    
-    curveVertex(frog.body.x + 60, frog.body.y - 40);   // upper-right shoulder
-    curveVertex(frog.body.x + 70, frog.body.y + 10);   // right side bulge
-    curveVertex(frog.body.x + 115, frog.body.y + 60);  // bottom-right hip
-    curveVertex(frog.body.x + 100, frog.body.y + 60);  // duplicate for curve end
+    curveVertex(frog.body.x + 60 * bodyWidthFrog, frog.body.y - 40);   // upper-right shoulder
+    curveVertex(frog.body.x + 70 * bodyWidthFrog, frog.body.y + 10);   // right side bulge
+    curveVertex(frog.body.x + 115 * bodyWidthFrog, frog.body.y + 60);  // bottom-right hip
+    curveVertex(frog.body.x + 100 * bodyWidthFrog, frog.body.y + 60);  // duplicate for curve end
     endShape(CLOSE);
     pop();
 
@@ -386,7 +409,7 @@ function drawFrog() {
     noStroke();
     translate(frog.body.x - 80, frog.body.y);
     rotate(6.8);
-    ellipse(0, 0, 50, 70);
+    ellipse(0 - eyeDisplacementF, 0, 50 * bodyWidthFrog, 70 * bodyWidthFrog);
     pop();
 
     //Draw the left eyeball highlight
@@ -395,7 +418,7 @@ function drawFrog() {
     noStroke();
     translate(frog.body.x - 100, frog.body.y);
     rotate(6.6);
-    ellipse(0, 0, 5, 10);
+    ellipse(0 - eyeDisplacementF, 0, 5 * bodyWidthFrog, 10 * bodyWidthFrog);
     pop();
 
     //Draw the right eyeball
@@ -404,7 +427,7 @@ function drawFrog() {
     noStroke();
     translate(frog.body.x + 80, frog.body.y);
     rotate(8.9 );
-    ellipse(0, 0, 50, 70);
+    ellipse(0 - eyeDisplacementF, 0, 50 * bodyWidthFrog, 70 * bodyWidthFrog);
     pop();
 
     //Draw the right eyeball highlight
@@ -413,7 +436,7 @@ function drawFrog() {
     noStroke();
     translate(frog.body.x + 100, frog.body.y);
     rotate(9.1);
-    ellipse(0, 0, 5, 10);
+    ellipse(0 - eyeDisplacementF, 0, 5 * bodyWidthFrog, 10 * bodyWidthFrog);
     pop();
 
     // Draw the left eyelid
@@ -421,10 +444,10 @@ function drawFrog() {
     fill("#2c9950ff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x - 90, frog.body.y + 20);  // curve start
-    curveVertex(frog.body.x - 113, frog.body.y + 50);  // bottom-left corner
-    curveVertex(frog.body.x - 40, frog.body.y + 10);   // left side
-    curveVertex(frog.body.x - 60, frog.body.y - 45);   // upper-left corner 
+    curveVertex(frog.body.x - 90 * bodyWidthFrog, frog.body.y + 20);  // curve start
+    curveVertex(frog.body.x - 113 * bodyWidthFrog, frog.body.y + 50);  // bottom-left corner
+    curveVertex(frog.body.x - 40 * bodyWidthFrog, frog.body.y + 10);   // left side
+    curveVertex(frog.body.x - 60 * bodyWidthFrog, frog.body.y - 45);   // upper-left corner 
     endShape(CLOSE);
     pop();
 
@@ -433,10 +456,10 @@ function drawFrog() {
     fill("#2c9950ff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x + 90, frog.body.y + 20);  // curve start
-    curveVertex(frog.body.x + 113, frog.body.y + 50);  // bottom-right corner
-    curveVertex(frog.body.x + 40, frog.body.y + 10);   // right side
-    curveVertex(frog.body.x + 60, frog.body.y - 45);   // upper-right corner 
+    curveVertex(frog.body.x + 90 * bodyWidthFrog, frog.body.y + 20);  // curve start
+    curveVertex(frog.body.x + 113 * bodyWidthFrog, frog.body.y + 50);  // bottom-right corner
+    curveVertex(frog.body.x + 40 * bodyWidthFrog, frog.body.y + 10);   // right side
+    curveVertex(frog.body.x + 60 * bodyWidthFrog, frog.body.y - 45);   // upper-right corner 
     endShape(CLOSE);
     pop();
 
@@ -445,11 +468,11 @@ function drawFrog() {
     fill("#2c9950ff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x - 10, frog.body.y + 90);  // duplicate for curve start
-    curveVertex(frog.body.x - 5, frog.body.y + 40);   // left side bulge
+    curveVertex(frog.body.x - 10 * bodyWidthFrog, frog.body.y + 90);  // duplicate for curve start
+    curveVertex(frog.body.x - 5 * bodyWidthFrog, frog.body.y + 40);   // left side bulge
     curveVertex(frog.body.x, frog.body.y + 20);        // top center (head area)
-    curveVertex(frog.body.x + 5, frog.body.y + 40);   // right side bulge
-    curveVertex(frog.body.x + 10, frog.body.y + 90);  // duplicate for curve end
+    curveVertex(frog.body.x + 5 * bodyWidthFrog, frog.body.y + 40);   // right side bulge
+    curveVertex(frog.body.x + 10 * bodyWidthFrog, frog.body.y + 90);  // duplicate for curve end
     endShape(CLOSE);
     pop();
 
@@ -458,13 +481,13 @@ function drawFrog() {
     fill("#ce8c46ff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x - 250, frog.body.y + 90); // bottom left start point
-    curveVertex(frog.body.x - 265, frog.body.y + 40); // left-most toe bean
-    curveVertex(frog.body.x - 238, frog.body.y + 43); // left and middle webbing
-    curveVertex(frog.body.x - 220, frog.body.y + 5); // middle toe bean
-    curveVertex(frog.body.x - 195, frog.body.y + 40); // right and middle webbing
-    curveVertex(frog.body.x - 170, frog.body.y + 20); // right toe bean
-    curveVertex(frog.body.x - 195, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x - 250 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x - 265 * bodyWidthFrog, frog.body.y + 40); // left-most toe bean
+    curveVertex(frog.body.x - 238 * bodyWidthFrog, frog.body.y + 43); // left and middle webbing
+    curveVertex(frog.body.x - 220 * bodyWidthFrog, frog.body.y + 5); // middle toe bean
+    curveVertex(frog.body.x - 195 * bodyWidthFrog, frog.body.y + 40); // right and middle webbing
+    curveVertex(frog.body.x - 170 * bodyWidthFrog, frog.body.y + 20); // right toe bean
+    curveVertex(frog.body.x - 195 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -472,9 +495,9 @@ function drawFrog() {
     push();
     fill("#ce8c46ff");
     noStroke();
-    ellipse(frog.body.x - 173, frog.body.y + 25, 24);
-    ellipse(frog.body.x - 221, frog.body.y + 2, 24);
-    ellipse(frog.body.x - 267, frog.body.y + 36, 24);
+    ellipse(frog.body.x - 173 * bodyWidthFrog, frog.body.y + 25 * bodyWidthFrog, 24 * bodyWidthFrog);
+    ellipse(frog.body.x - 221 * bodyWidthFrog, frog.body.y + 2 * bodyWidthFrog, 24 * bodyWidthFrog);
+    ellipse(frog.body.x - 267 * bodyWidthFrog, frog.body.y + 36 * bodyWidthFrog, 24 * bodyWidthFrog);
     pop();
 
     //Draw the right foot
@@ -482,13 +505,13 @@ function drawFrog() {
     fill("#ce8c46ff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x + 250, frog.body.y + 90); // bottom left start point
-    curveVertex(frog.body.x + 265, frog.body.y + 40); // left-most toe bean
-    curveVertex(frog.body.x + 238, frog.body.y + 43); // left and middle webbing
-    curveVertex(frog.body.x + 220, frog.body.y + 5); // middle toe bean
-    curveVertex(frog.body.x + 195, frog.body.y + 40); // right and middle webbing
-    curveVertex(frog.body.x + 170, frog.body.y + 20); // right toe bean
-    curveVertex(frog.body.x + 195, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x + 250 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x + 265 * bodyWidthFrog, frog.body.y + 40); // left-most toe bean
+    curveVertex(frog.body.x + 238 * bodyWidthFrog, frog.body.y + 43); // left and middle webbing
+    curveVertex(frog.body.x + 220 * bodyWidthFrog, frog.body.y + 5); // middle toe bean
+    curveVertex(frog.body.x + 195 * bodyWidthFrog, frog.body.y + 40); // right and middle webbing
+    curveVertex(frog.body.x + 170 * bodyWidthFrog, frog.body.y + 20); // right toe bean
+    curveVertex(frog.body.x + 195 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -496,9 +519,9 @@ function drawFrog() {
     push();
     fill("#ce8c46ff");
     noStroke();
-    ellipse(frog.body.x + 173, frog.body.y + 25, 24);
-    ellipse(frog.body.x + 221, frog.body.y + 2, 24);
-    ellipse(frog.body.x + 267, frog.body.y + 36, 24);
+    ellipse(frog.body.x + 173 * bodyWidthFrog, frog.body.y + 25 * bodyWidthFrog, 24 * bodyWidthFrog);
+    ellipse(frog.body.x + 221 * bodyWidthFrog, frog.body.y + 2 * bodyWidthFrog, 24 * bodyWidthFrog);
+    ellipse(frog.body.x + 267 * bodyWidthFrog, frog.body.y + 36 * bodyWidthFrog, 24 * bodyWidthFrog);
     pop();
 
     //Draw the left foot highlights
@@ -506,13 +529,13 @@ function drawFrog() {
     fill("#ddae7cff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x - 230, frog.body.y + 90); // bottom left start point
-    curveVertex(frog.body.x - 265, frog.body.y + 40); // left-most toe bean
-    curveVertex(frog.body.x - 228, frog.body.y + 50); // left and middle webbing
-    curveVertex(frog.body.x - 220, frog.body.y + 5); // middle toe bean
-    curveVertex(frog.body.x - 200, frog.body.y + 43); // right and middle webbing
-    curveVertex(frog.body.x - 170, frog.body.y + 20); // right toe bean
-    curveVertex(frog.body.x - 200, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x - 230 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x - 265 * bodyWidthFrog, frog.body.y + 40); // left-most toe bean
+    curveVertex(frog.body.x - 228 * bodyWidthFrog, frog.body.y + 50); // left and middle webbing
+    curveVertex(frog.body.x - 220 * bodyWidthFrog, frog.body.y + 5); // middle toe bean
+    curveVertex(frog.body.x - 200 * bodyWidthFrog, frog.body.y + 43); // right and middle webbing
+    curveVertex(frog.body.x - 170 * bodyWidthFrog, frog.body.y + 20); // right toe bean
+    curveVertex(frog.body.x - 200 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -520,9 +543,9 @@ function drawFrog() {
     push();
     fill("#ddae7cff");
     noStroke();
-    ellipse(frog.body.x - 174, frog.body.y + 27, 19, 23); //right-most
-    ellipse(frog.body.x - 218, frog.body.y + 4, 19, 22); // middle
-    ellipse(frog.body.x - 265, frog.body.y + 36, 20, 22); // left-most
+    ellipse(frog.body.x - 174 * bodyWidthFrog, frog.body.y + 27 * bodyWidthFrog, 19 * bodyWidthFrog, 23 * bodyWidthFrog); //right-most
+    ellipse(frog.body.x - 218 * bodyWidthFrog, frog.body.y + 4 * bodyWidthFrog, 19 * bodyWidthFrog, 22 * bodyWidthFrog); // middle
+    ellipse(frog.body.x - 265 * bodyWidthFrog, frog.body.y + 36 * bodyWidthFrog, 20 * bodyWidthFrog, 22 * bodyWidthFrog); // left-most
     pop();
 
     //Draw the right foot highlights
@@ -530,13 +553,13 @@ function drawFrog() {
     fill("#ddae7cff");
     noStroke();
     beginShape();
-    curveVertex(frog.body.x + 242, frog.body.y + 90); // bottom left start point
-    curveVertex(frog.body.x + 265, frog.body.y + 40); // left-most toe bean
-    curveVertex(frog.body.x + 231, frog.body.y + 48); // left and middle webbing
-    curveVertex(frog.body.x + 220, frog.body.y + 5); // middle toe bean
-    curveVertex(frog.body.x + 200, frog.body.y + 49); // right and middle webbing
-    curveVertex(frog.body.x + 170, frog.body.y + 20); // right toe bean
-    curveVertex(frog.body.x + 205, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x + 242 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
+    curveVertex(frog.body.x + 265 * bodyWidthFrog, frog.body.y + 40); // left-most toe bean
+    curveVertex(frog.body.x + 231 * bodyWidthFrog, frog.body.y + 48); // left and middle webbing
+    curveVertex(frog.body.x + 220 * bodyWidthFrog, frog.body.y + 5); // middle toe bean
+    curveVertex(frog.body.x + 200 * bodyWidthFrog, frog.body.y + 49); // right and middle webbing
+    curveVertex(frog.body.x + 170 * bodyWidthFrog, frog.body.y + 20); // right toe bean
+    curveVertex(frog.body.x + 205 * bodyWidthFrog, frog.body.y + 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -544,9 +567,9 @@ function drawFrog() {
     push();
     fill("#ddae7cff");
     noStroke();
-    ellipse(frog.body.x + 174, frog.body.y + 27, 19, 23); // right-most
-    ellipse(frog.body.x + 220, frog.body.y + 4, 19, 22); // middle
-    ellipse(frog.body.x + 265, frog.body.y + 36, 20, 22); // left-most
+    ellipse(frog.body.x + 174 * bodyWidthFrog, frog.body.y + 27 * bodyWidthFrog, 19 * bodyWidthFrog, 23 * bodyWidthFrog); // right-most
+    ellipse(frog.body.x + 220 * bodyWidthFrog, frog.body.y + 4 * bodyWidthFrog, 19 * bodyWidthFrog, 22 * bodyWidthFrog); // middle
+    ellipse(frog.body.x + 265 * bodyWidthFrog, frog.body.y + 36 * bodyWidthFrog, 20 * bodyWidthFrog, 22 * bodyWidthFrog); // left-most
     pop();
 }
 
@@ -659,7 +682,7 @@ function drawToad() {
     fill("#8b6d21ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 35, 0 - (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
+    ellipse(0 + 35, 0 - (20 + eyeDisplacementT), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the right eye back
@@ -668,7 +691,7 @@ function drawToad() {
     fill("#8b6d21ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 35, 0 + (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
+    ellipse(0 + 35, 0 + (20 + eyeDisplacementT), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the left eye
@@ -677,7 +700,7 @@ function drawToad() {
     fill("#c3da30ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 40, 0 - (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the right eye
@@ -686,7 +709,7 @@ function drawToad() {
     fill("#c3da30ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 40, 0 + (20 + eyeDisplacementY), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
     // Draws the left hypno RED eye
@@ -695,7 +718,7 @@ function drawToad() {
     fill("#ac2601ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 40, 0 - (20 + eyeDisplacementY), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
     pop();
 
     // Draws the right hypno RED eye
@@ -704,7 +727,7 @@ function drawToad() {
     fill("#ac2601ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 40, 0 + (20 + eyeDisplacementY), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
     pop();
 
     // Draws the left hypno BLACK eye
@@ -713,7 +736,7 @@ function drawToad() {
     fill("#000000ff");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 40, 0 - (20 + eyeDisplacementY), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
     pop();
 
     // Draws the right hypno BLACK eye
@@ -722,7 +745,7 @@ function drawToad() {
     fill("#000000ff");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 40, 0 + (20 + eyeDisplacementY), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
     pop();
 
     // Draws the toad's right foot
@@ -752,13 +775,13 @@ function drawToad() {
     scale(-1, 1);
 
     beginShape();
-    curveVertex(210 * bodyWidthToad, 90); // right left start point
-    curveVertex(215 * bodyWidthToad, 30); // right-most toe bean
-    curveVertex(198 * bodyWidthToad, 43); // right and middle webbing
-    curveVertex(180 * bodyWidthToad, 5); // middle toe bean
-    curveVertex(165 * bodyWidthToad, 40); // left and middle webbing
-    curveVertex(140 * bodyWidthToad, 30); // left toe bean
-    curveVertex(165 * bodyWidthToad, 90); // bottom left start point
+    curveVertex(220 * bodyWidthToad, 90); // right left start point
+    curveVertex(225 * bodyWidthToad, 30); // right-most toe bean
+    curveVertex(208 * bodyWidthToad, 43); // right and middle webbing
+    curveVertex(190 * bodyWidthToad, 5); // middle toe bean
+    curveVertex(175 * bodyWidthToad, 40); // left and middle webbing
+    curveVertex(150 * bodyWidthToad, 30); // left toe bean
+    curveVertex(175 * bodyWidthToad, 90); // bottom left start point
     endShape(CLOSE);
     pop();
 
@@ -789,13 +812,13 @@ function drawToad() {
     scale(-1, 1);
 
     beginShape();
-    curveVertex(205 * bodyWidthToad, 90); // right left start point
-    curveVertex(210 * bodyWidthToad, 40); // right-most toe bean
-    curveVertex(195 * bodyWidthToad, 55); // right and middle webbing
-    curveVertex(180 * bodyWidthToad, 15); // middle toe bean
-    curveVertex(169 * bodyWidthToad, 45); // left and middle webbing
-    curveVertex(148 * bodyWidthToad, 40); // left toe bean
-    curveVertex(165 * bodyWidthToad, 90); // bottom left start point
+    curveVertex(215 * bodyWidthToad, 90); // right left start point
+    curveVertex(220 * bodyWidthToad, 40); // right-most toe bean
+    curveVertex(205 * bodyWidthToad, 55); // right and middle webbing
+    curveVertex(190 * bodyWidthToad, 15); // middle toe bean
+    curveVertex(179 * bodyWidthToad, 45); // left and middle webbing
+    curveVertex(158 * bodyWidthToad, 40); // left toe bean
+    curveVertex(175 * bodyWidthToad, 90); // bottom left start point
     endShape(CLOSE);
     pop();
     
@@ -812,6 +835,14 @@ function checkTongueFlyOverlap() {
     if (eaten) {
         // Reset the fly
         resetFly();
+        // Increase frog's size
+        bodyWidthFrog += 0.04;
+        // Moves eyes apart on X axis
+        eyeDisplacementF = 9;
+        // Cap eye displacement
+        eyeDisplacementF = constrain(eyeDisplacementF, 9, 45);
+        // Cap the size increase
+        bodyWidthFrog = constrain(bodyWidthFrog, 1, 1.20);
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
@@ -823,7 +854,7 @@ function checkTongueFlyOverlap() {
 function checkFlyToadOverlap() {
     let mouthX = toad.body.x - 50;
     let mouthY = toad.body.y;
-    let mouthToadRadius = (75 * bodyWidthToad) / 2;
+    let mouthToadRadius = (100 * bodyWidthToad) / 2;
     let flyRadius = fly.size / 2;
 
     // Distance between fly and toad mouth
@@ -835,7 +866,7 @@ function checkFlyToadOverlap() {
         // Increase toad's size
         bodyWidthToad += 0.04;
         // Moves eyes apart on Y axis
-        eyeDisplacementY += 5;
+        eyeDisplacementT += 5;
         // Cap the size increase
         bodyWidthToad = constrain(bodyWidthToad, 1, 1.20);
     }
