@@ -97,6 +97,7 @@ setInterval(() => {
     if (shrinkingW) {
         // Shrinking effect for width
         toad.hypnoEyesB.w -= hypnoSpeedW;
+        toad.hypnoEyesR.w -= hypnoSpeedW;
         // Stops the width from shrinking once it reaches 0.3x of it's original size
         if (toad.hypnoEyesB.w <= originalWidthB * 0.3) {
             toad.hypnoEyesB.w = originalWidthB * 0.3;
@@ -105,6 +106,7 @@ setInterval(() => {
         // Expands the eye back to its original width once it reaches its minimum
     } else {
         toad.hypnoEyesB.w += hypnoSpeedW;
+        toad.hypnoEyesR.w += hypnoSpeedW;
         if (toad.hypnoEyesB.w >= originalWidthB) {
             toad.hypnoEyesB.w = originalWidthB;
             shrinkingW = true;
@@ -217,6 +219,7 @@ function draw() {
         drawFrog();
         checkTongueFlyOverlap();
         drawToad();
+        moveToad();
         checkFlyToadOverlap();
     } else if (gameWin) {
         showWinScreen();
@@ -324,6 +327,7 @@ function lightGradient() {
         let c = lerpColor(innerCol, outerCol, m);
         let a = map(r, lightRadius, 0, 0, 15);
         fill(c.levels[0], c.levels[1], c.levels[2], a);
+        noStroke();
         ellipse(fly.x, fly.y, r * 1.5, r * 1.5);
     }
     pop();
@@ -1028,5 +1032,11 @@ function resetGame() {
 
     // Resets the fly
     resetFly();
+}
+
+function moveToad() {
+    let diffY = fly.y - toad.body.y;
+    let offset = diffY / 100;
+    toad.body.y += offset;
 }
 
