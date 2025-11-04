@@ -76,6 +76,9 @@ let gameStart = false;
 // Boolean for game win
 let gameWin = false;
 
+// Boolean for game loss
+let gameLoss = false;
+
 // Utilizing variable to more easily access the original width/height
 let originalWidthB = toad.hypnoEyesB.w;
 let originalHeightB = toad.hypnoEyesB.h;
@@ -217,6 +220,8 @@ function draw() {
         checkFlyToadOverlap();
     } else if (gameWin) {
         showWinScreen();
+    } else if (gameLoss) {
+        showLossScreen();
     } else {
         titleScreen();
     }      
@@ -855,9 +860,14 @@ function checkTongueFlyOverlap() {
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
-
+    // Wins state if frog eats enough flies
     if (bodyWidthFrog >= 1.2) {
         gameWin = true;
+        gameStart = false;
+    }
+    // Loss state if toad eats enough flies
+    if (bodyWidthToad >= 1.2) {
+        gameLoss = true;
         gameStart = false;
     }
 }
@@ -934,6 +944,31 @@ function showWinScreen() {
     }
 }
 
+function showLossScreen() {
+
+    let hoverRadius = 100;
+    background("#4b3617ff");
+    textSize(120);
+    fill("#fff");
+    text(":(", width / 2, height / 2 - 50);
+
+    textSize(60);
+    text("You were no match for the gluttinous hypno toad..", width / 2, height / 2 + 35);
+       
+    // Checks distance from mouse to text, displays text when hovering
+    if (dist(mouseX, mouseY, width / 2, height / 2 + 150) < hoverRadius) {
+        fill("#ffdaa3ff");
+        textSize(90);
+        text("RETRY?", width / 2, height / 2 + 150);
+    }
+    // If not, do blinking
+    else if (frameCount % 60 < 30) {
+        fill("#fff");
+        textSize(90);
+        text("RETRY?", width / 2, height / 2 + 150);
+    }
+}
+
 /**
  * Starts the game when mouse is pressed over "PLAY", "Play Again?", or "RETRY?"
  */
@@ -941,7 +976,7 @@ function mousePressed() {
     let hoverRadius = 100;
 
     // Game start screen displays "PLAY"
-    if (!gameStart && !gameWin) {
+    if (!gameStart) {
         let textPlayX = width / 2;
         let textPlayY = height / 2 + 175;
         // Checks if mouse is hovering over PLAY
@@ -951,11 +986,21 @@ function mousePressed() {
     }
 
     // Victory screen displays "Play Again?"
-    if (gameWin) {
+    if (!gameWin) {
         let playAgainX = width / 2;
         let playAgainY = height / 2 + 150;
         // Checks if mouse is hovering over Play Again?
         if (dist(mouseX, mouseY, playAgainX, playAgainY) < hoverRadius) {
+            resetGame();
+        }
+    }
+
+    // Loss screen displays "RETRY?"
+    if (!gameLoss) {
+        let retryX = width / 2;
+        let retryY = height / 2 + 150;
+        // Checks if mouse is hovering over Play Again?
+        if (dist(mouseX, mouseY, retryX, retryY) < hoverRadius) {
             resetGame();
         }
     }
@@ -968,6 +1013,7 @@ function mousePressed() {
 
 function resetGame() {
     gameWin = false;
+    gameLoss = false;
     gameStart = true;
 
     // Resets the frog
