@@ -8,7 +8,7 @@
  * Instructions:
  * - Move the frog with your mouse
  * - Click to launch the tongue
- * - Catch flies
+ * - Catch enough flies before the toad eats them all
  * 
  * Made with p5
  * https://p5js.org/
@@ -27,7 +27,7 @@ const frog = {
     tongue: {
         x: undefined,
         y: 880,
-        size: 20,
+        size: 30,
         speed: 45,
         // Determines how the tongue moves each frame
         state: "idle" // State can be: idle, outbound, inbound
@@ -63,8 +63,8 @@ let bodyWidthToad = 1.0;
 let bodyWidthFrog = 1.0;
 
 // Variable to easily use both creature's original sizes
-let originalBodyWidthFrog = 1;
-let originalBodyWidthToad = 1;
+let originalBodyWidthFrog = 1.0;
+let originalBodyWidthToad = 1.0;
 
 // Allows for eye separation as toad and frog gets wider
 let eyeDisplacementT = 0;
@@ -143,7 +143,7 @@ const fly = {
     x: 0,
     y: 400, // Will be random
     size: 15,
-    speed: 6,
+    speed: 6, // Also random
 
     wingFlipX: 1,
     wingFlipY: 1
@@ -212,7 +212,6 @@ function draw() {
     // Draws all the other objects if the game starts
     if (gameStart) {
         moveFly();
-        lightGradient();
         drawFly();
         moveFrog();
         moveTongue();
@@ -221,6 +220,7 @@ function draw() {
         drawToad();
         moveToad();
         checkFlyToadOverlap();
+        lightGradient();
     } else if (gameWin) {
         showWinScreen();
     } else if (gameLoss) {
@@ -309,7 +309,7 @@ function drawFly() {
 function resetFly() {
     fly.x = 0;
     fly.y = random(20, 500);
-    fly.speed = random(5, 12);
+    fly.speed = random(8, 16);
 }
 
 /**
@@ -849,12 +849,12 @@ function checkTongueFlyOverlap() {
     // Get distance from tongue to fly
     const d = dist(frog.tongue.x, frog.tongue.y, fly.x, fly.y);
     // Check if it's an overlap
-    const eaten = (d < frog.tongue.size/2 + fly.size/2);
+    const eaten = (d < frog.tongue.size / 2 + fly.size / 2);
     if (eaten) {
         // Reset the fly
         resetFly();
         // Increase frog's size
-        bodyWidthFrog += 0.04;
+        bodyWidthFrog += 0.03;
         // Moves eyes apart on X axis
         eyeDisplacementF = 9;
         // Cap eye displacement
@@ -870,7 +870,7 @@ function checkTongueFlyOverlap() {
         gameStart = false;
     }
     // Loss state if toad eats enough flies
-    if (bodyWidthToad >= 1.2) {
+    if (bodyWidthToad >= 1.3) {
         gameLoss = true;
         gameStart = false;
     }
@@ -892,11 +892,11 @@ function checkFlyToadOverlap() {
         // Respawn the fly
         resetFly();
         // Increase toad's size
-        bodyWidthToad += 0.04;
+        bodyWidthToad += 0.05;
         // Moves eyes apart on Y axis
         eyeDisplacementT += 5;
         // Cap the size increase
-        bodyWidthToad = constrain(bodyWidthToad, 1, 1.20);
+        bodyWidthToad = constrain(bodyWidthToad, 1, 1.30);
     }
 }
 
@@ -986,30 +986,33 @@ function mousePressed() {
         // Checks if mouse is hovering over PLAY
         if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
             resetGame();
+            return;
         }
     }
 
     // Victory screen displays "Play Again?"
-    if (!gameWin) {
+    if (gameWin) {
         let playAgainX = width / 2;
         let playAgainY = height / 2 + 150;
         // Checks if mouse is hovering over Play Again?
         if (dist(mouseX, mouseY, playAgainX, playAgainY) < hoverRadius) {
             resetGame();
+            return;
         }
     }
 
     // Loss screen displays "RETRY?"
-    if (!gameLoss) {
+    if (gameLoss) {
         let retryX = width / 2;
         let retryY = height / 2 + 150;
-        // Checks if mouse is hovering over Play Again?
+        // Checks if mouse is hovering over Retry?
         if (dist(mouseX, mouseY, retryX, retryY) < hoverRadius) {
             resetGame();
+            return;
         }
     }
 
-    // Launches tongue during game
+    // Launches tongue during game (only when playing and tongue is idle)
     if (gameStart && frog.tongue.state === "idle") {
         frog.tongue.state = "outbound";
     }
@@ -1036,7 +1039,7 @@ function resetGame() {
 
 function moveToad() {
     let diffY = fly.y - toad.body.y;
-    let offset = diffY / 100;
+    let offset = diffY / 60;
     toad.body.y += offset;
 }
 
