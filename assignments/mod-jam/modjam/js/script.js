@@ -62,12 +62,19 @@ let toad = {
 let bodyWidthToad = 1.0;
 let bodyWidthFrog = 1.0;
 
+// Variable to easily use both creature's original sizes
+let originalBodyWidthFrog = 1;
+let originalBodyWidthToad = 1;
+
 // Allows for eye separation as toad and frog gets wider
 let eyeDisplacementT = 0;
 let eyeDisplacementF = 0;
 
 // Boolean for game start
 let gameStart = false;
+
+// Boolean for game win
+let gameWin = false;
 
 // Utilizing variable to more easily access the original width/height
 let originalWidthB = toad.hypnoEyesB.w;
@@ -208,6 +215,8 @@ function draw() {
         checkTongueFlyOverlap();
         drawToad();
         checkFlyToadOverlap();
+    } else if (gameWin) {
+        showWinScreen();
     } else {
         titleScreen();
     }      
@@ -846,6 +855,11 @@ function checkTongueFlyOverlap() {
         // Bring back the tongue
         frog.tongue.state = "inbound";
     }
+
+    if (bodyWidthFrog >= 1.2) {
+        gameWin = true;
+        gameStart = false;
+    }
 }
 
 /**
@@ -872,32 +886,6 @@ function checkFlyToadOverlap() {
     }
 }
 
-
-/**
- * Starts the game when mouse is pressed over "PLAY"
- */
-function mousePressed() {
-    if (!gameStart) {
-        // Check if mouse is over "PLAY" text
-        let textPlayX = width / 2;
-        let textPlayY = height / 2 + 175;
-        let hoverRadius = 100;
-
-        if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
-            // Starts the game
-            gameStart = true;
-        }
-    } else {
-        // Launches tongue only when the game is running
-        if (frog.tongue.state === "idle") {
-            frog.tongue.state = "outbound";
-        }
-    }
-}
-
-// Boolean for text fill hover
-let showText = true;
-
 function titleScreen() {
     image(titleImage, width / 2, height / 2 - 100);
 
@@ -920,3 +908,79 @@ function titleScreen() {
             text("PLAY", textPlayX, textPlayY);
         }
 }
+
+function showWinScreen() {
+
+    let hoverRadius = 100;
+    background("#fbb040");
+    textSize(120);
+    fill("#fff");
+    text("SUCCESS!", width / 2, height / 2 - 50);
+
+    textSize(60);
+    text("The gluttinous hypno toad is no more!.. Right?", width / 2, height / 2 + 35);
+       
+    // Checks distance from mouse to text, displays text when hovering
+    if (dist(mouseX, mouseY, width / 2, height / 2 + 150) < hoverRadius) {
+        fill("#ffdaa3ff");
+        textSize(90);
+        text("Play Again?", width / 2, height / 2 + 150);
+    }
+    // If not, do blinking
+    else if (frameCount % 60 < 30) {
+        fill("#fff");
+        textSize(90);
+        text("Play Again?", width / 2, height / 2 + 150);
+    }
+}
+
+/**
+ * Starts the game when mouse is pressed over "PLAY", "Play Again?", or "RETRY?"
+ */
+function mousePressed() {
+    let hoverRadius = 100;
+
+    // Game start screen displays "PLAY"
+    if (!gameStart && !gameWin) {
+        let textPlayX = width / 2;
+        let textPlayY = height / 2 + 175;
+        // Checks if mouse is hovering over PLAY
+        if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
+            resetGame();
+        }
+    }
+
+    // Victory screen displays "Play Again?"
+    if (gameWin) {
+        let playAgainX = width / 2;
+        let playAgainY = height / 2 + 150;
+        // Checks if mouse is hovering over Play Again?
+        if (dist(mouseX, mouseY, playAgainX, playAgainY) < hoverRadius) {
+            resetGame();
+        }
+    }
+
+    // Launches tongue during game
+    if (gameStart && frog.tongue.state === "idle") {
+        frog.tongue.state = "outbound";
+    }
+}
+
+function resetGame() {
+    gameWin = false;
+    gameStart = true;
+
+    // Resets the frog
+    bodyWidthFrog = originalBodyWidthFrog;
+    eyeDisplacementF = 0;
+    frog.tongue.y = 880;
+    frog.tongue.state = "idle";
+
+    // Resets the toad
+    bodyWidthToad = originalBodyWidthToad;
+    eyeDisplacementT = 0;
+
+    // Resets the fly
+    resetFly();
+}
+
