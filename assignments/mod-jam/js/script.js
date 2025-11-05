@@ -261,6 +261,7 @@ function setup() {
 
     imageMode(CENTER);
 
+    ambientCroaking.play();
     ambientCroaking.loop();
     ambientCroaking.setVolume(0.3);
     
