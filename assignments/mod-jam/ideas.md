@@ -1,0 +1,61 @@
+Modjam Ideas (20!)
+
+1. (All hail the hypno toad) The flies will be flying to the right of the screen due to the fact that they are under hypnosis from the 'hypno toad.' The toad is also on the right of the screen and is trying to eat them and deny our frog their dinner.
+   -Can make its presence known by showing up on screen and eating the title, signifying its "evil" intent.
+
+2. Scoring system will be based off of how many flies the toad did not eat and will be counted through the use of a "discontent' meter, once it reaches zero, the player (frog) wins.
+   -Need to translate numbers in a dynamic visual way
+
+3. There will be a limited number of flies, if the toad eats too many, the frog loses.
+   -Similar to my second idea, there will be a 'full' meter for the toad. Top right? Behind the toad?
+
+4. Potential powerups (?) that will occasionally fly on screen, if the frog eats them, they would slow down time or something along those lines.
+   -Utilizing overlap and distance once the frog eats the power up to change various elements, such as changing the velocity and acceleration of the flies.
+
+5. Once the frog wins, it can be displayed through a rapid colour-changing disco party, where the frog itself and the UI elements start rapidly changing colour.
+   -lerpcolor? Some way to rapidly change the colours in a specific pattern on a victory condition
+
+6. Music could also play on a win.
+   -Just need to find out how to get audio to play.
+
+7. If the toad wins, the frog gets hypnotised and changes colour to that of the toad, and joins him on the right of the screen
+   -Simple colour change and position change. Could make it so that the converted frog joins the toad, and there will be two toads on next playthrough to make it more difficult? Seems a bit much though.
+
+8. Unlike the frog, the toad will not use its tongue, rather it is large and will wait for the hypnotised flies to fly into its mouth willingly.
+   -Large toad, can have it take up much of the right side of the canvas, no need for a toad 'AI.' Maybe I could make it so that it follows the closest fly on the y-axis?
+
+9. Hypno Toad is a TV channel gag in the show Futurama, therefore I could add a secret functionality to one of the arrow keys, where pressing either the left or right arrow keys will "switch" the channel and get rid of the toad, essentially putting the game on easy mode without any way to lose.
+   -Pressing the key will get rid of the two meters and neutralize the toad, maybe change it to be invisible and make sure that the area in which the flies go to does not trigger a loss state.
+
+10. Another secret channel can be swapped to through arrow keys that puts the toad front and center in the screen and "hypnotizes" the player, essentially making it an instant lose.
+    -Center toad on screen, play hypno toad audio, instant loss state.
+
+11. Aside from hypno toad, can make the game akin to an old arcade style retro game, such as the scoring system being based off of points.
+    -Unsure of how to make pixelated text, or anything pixelated for that matter, will be a challenge.
+
+12. Since going this route has nothing to do with a toad, it can be as simple as having 'lives,' and too many flies that fly off screen results in a lose.
+    -Simple counter that keeps track as to how many flies fly off the boundary of the canvas.
+
+13. Could make the frog rotate around the edges of the canvas rather than just the bottom for more dynamic gameplay.
+    -Dynamic positioning, unsure of how to accomplish at the current moment.
+
+14. Flies will randomly fly all around the screen and eventually fly off of one of the edges of the canvas.
+    -Lot of random variables, will have to make sure they eventually fly off the canvas from the x or y axis.
+
+15. To aid in this endeavor, maybe the frog mutates and develops a split tongue to catch 2 at a time?
+    -Adding a second contact point between the tip of the tongue and a fly, challenge would be to mutate the shape correctly.
+
+16. Flies will most likely have to be much faster to make this more of a challenge, similar to old arcade games
+    -Simple increase in velocity and acceleration.
+
+17. Or, after enough flies have been eaten, the frog will essentially have a duplicate version of itself on the opposite side of the canvas to aid in fly eradication.
+    -Counter that keeps track of how many flies the frog has consumed, duplicates itself mid playthrough on the other end and controls the exact same as the original frog, just flipped.
+
+18. Having the tongue stretch out to where the cursor was located upon mousePress would be nice, rather than just a straight line.
+    -Dynamic shape change, unsure of how to make the tongue maintain its shape diagonally.
+
+19. Spacebar can be added to lash out the tongue rather than having to use mousePress.
+    -Simple addition of keyevent for the spacebar. Will have to add a delay so people are unable to rapidly press both spacebar and mousepress at the same time at a rapid pace and cheese the game.
+
+20. Day/night cycle? Night time makes the flies harder to see.
+    -Either changes midway through or is randomly determined on a new playthrough, which just changes the background and every colour on screen, emphasis on making the flies difficult to see.
