@@ -105,8 +105,10 @@ let shrinkingHB = true;
 let shrinkingHPurple = true;
 let shrinkingHPink = true;
 
-// Width animation for black hypno eyes
-// Interval allows for continuous loop
+/**
+* Width animation for BLACK hypno eyes
+* Interval allows for continuous loop
+*/
 setInterval(() => {
     if (shrinkingW) {
         // Shrinking effect for width
@@ -133,8 +135,10 @@ setInterval(() => {
 },
     40);
 
-// Height animation for black hypno eyes
-// Interval allows for continuous loop
+/**
+* Height animation for BLACK hypno eyes
+* Interval allows for continuous loop
+*/
 setInterval(() => {
     if (shrinkingHB) {
         // Shrinking effect for height
@@ -155,8 +159,10 @@ setInterval(() => {
 },
     40);
 
-// Height animation for PURPLE hypno eyes
-// Interval allows for continuous loop
+/**
+* Height animation for PURPLE hypno eyes
+* Interval allows for continuous loop
+*/
 setInterval(() => {
     if (shrinkingHPurple) {
         // Shrinking effect for height
@@ -177,8 +183,10 @@ setInterval(() => {
 },
     40);
 
-// Height animation for PINK hypno eyes
-// Interval allows for continuous loop
+/**
+* Height animation for PINK hypno eyes
+* Interval allows for continuous loop
+*/
 setInterval(() => {
     if (shrinkingHPink) {
         // Shrinking effect for height
@@ -211,6 +219,9 @@ const fly = {
     wingFlipY: 1
 };
 
+/**
+* Flaps the fly's wings
+*/
 setInterval(function () {
     fly.wingFlipX = fly.wingFlipX * -1;
     fly.wingFlipY = fly.wingFlipY * -1;
@@ -227,7 +238,9 @@ let frogEatFly;
 let toadEatFly;
 let ambientCroaking;
 
-// Preloads my title image, font and sounds
+/**
+* Preloads title image, font and sounds
+*/
 function preload() {
     titleImage = loadImage("../assets/images/battleofthebog.png");
     titleFont = loadFont("../assets/fonts/pixelgame.otf");
@@ -246,7 +259,7 @@ function setup() {
     createCanvas(1280, 880);
 
     imageMode(CENTER);
-
+    
     textFont(titleFont);
     textAlign(CENTER, CENTER);
 
@@ -254,12 +267,13 @@ function setup() {
     resetFly();
 }
 
+/**
+* Draws each function depending on start, win and loss screen
+*/
 function draw() {
     background("#172110ff");
 
-    /**
-    * Draws all the leaves in the background
-    */
+    // Draws all the leaves in the background
     drawLeaves(270, -200, 1.5, 0.4, 1, -1, "#3b5828ff");
     drawLeaves(1780, 450, 3, 1.7, -1, 1, "#3b5828ff");
     drawLeaves(550, 1150, 2.1, -0.1, -1, 1, "#3b5828ff");
@@ -290,10 +304,13 @@ function draw() {
         moveToad();
         checkFlyToadOverlap();
         lightGradient();
+    // Displays win screen
     } else if (gameWin) {
         showWinScreen();
+    // Displays loss screen
     } else if (gameLoss) {
         showLossScreen();
+    // Title screen when loading up canvas
     } else {
         titleScreen();
     }      
@@ -1009,6 +1026,9 @@ function checkFlyToadOverlap() {
     }
 }
 
+/**
+* Displays title screen when triggered and sets up PLAY button
+*/
 function titleScreen() {
     image(titleImage, width / 2, height / 2 - 100);
 
@@ -1032,6 +1052,9 @@ function titleScreen() {
         }
 }
 
+/**
+* Displays win screen when triggered and sets up appropriate text and PLAY AGAIN? button
+*/
 function showWinScreen() {
 
     let hoverRadius = 100;
@@ -1057,6 +1080,9 @@ function showWinScreen() {
     }
 }
 
+/**
+* Displays loss screen when triggered and sets up appropriate text and RETRY? button
+*/
 function showLossScreen() {
 
     let hoverRadius = 100;
@@ -1150,7 +1176,7 @@ function resetGame() {
 }
 
 /**
- * Moves the toad to the current fly in order to eat it
+ * Moves the toad to the current fly's y position in order to eat it
  */
 function moveToad() {
     let diffY = fly.y - toad.body.y;
