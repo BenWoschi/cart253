@@ -4,7 +4,7 @@ BEN WOSCHITZ
 
 - [Ideas](./ideas.md)
 
-[View this project online](https://benwoschi.github.io/cart253/assignments/mod-jam)
+[View this project online](https://benwoschi.github.io/cart253/assignments/mod-jam/)
 
 ## Description
 

@@ -242,10 +242,11 @@ let ambientCroaking;
 * Preloads title image, font and sounds
 */
 function preload() {
-    titleImage = loadImage("../assets/images/battleofthebog.png");
-    titleFont = loadFont("../assets/fonts/pixelgame.otf");
-    frogEatFly = loadSound("../assets/sounds/frogeat.wav");
-    toadEatFly = loadSound("../assets/sounds/toadeat.wav");
+    titleImage = loadImage("assets/images/battleofthebog.png");
+    titleFont = loadFont("assets/fonts/pixelgame.otf");
+    frogEatFly = loadSound("assets/sounds/frogeat.wav");
+    toadEatFly = loadSound("assets/sounds/toadeat.wav");
+    ambientCroaking = loadSound("assets/sounds/ambientcroaking.mp3");
 }
 
 /**
@@ -259,6 +260,9 @@ function setup() {
     createCanvas(1280, 880);
 
     imageMode(CENTER);
+
+    ambientCroaking.loop();
+    ambientCroaking.setVolume(0.3);
     
     textFont(titleFont);
     textAlign(CENTER, CENTER);
@@ -977,6 +981,7 @@ function checkTongueFlyOverlap() {
         resetFly();
         // Plays frog eat sound
         frogEatFly.play();
+        frogEatFly.setVolume(0.3);
         // Increase frog's size
         bodyWidthFrog += 0.03;
         // Moves eyes apart on X axis
@@ -1017,6 +1022,7 @@ function checkFlyToadOverlap() {
         resetFly();
         //Plays toad eat sound
         toadEatFly.play();
+        toadEatFly.setVolume(0.3);
         // Increase toad's size
         bodyWidthToad += 0.05;
         // Moves eyes apart on Y axis
@@ -1030,25 +1036,26 @@ function checkFlyToadOverlap() {
 * Displays title screen when triggered and sets up PLAY button
 */
 function titleScreen() {
+    // Displays title image
     image(titleImage, width / 2, height / 2 - 100);
 
-        // Defines text position
-        let textPlayX = width / 2;
-        let textPlayY = height / 2 + 175;
-        // Mouse detection radius
-        let hoverRadius = 100;
+    // Defines text position
+    let textPlayX = width / 2;
+    let textPlayY = height / 2 + 175;
+    // Mouse detection radius
+    let hoverRadius = 100;
 
-        // Checks distance from mouse to text, displays text when hovering
-        if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
-            fill("#ffdaa3ff");
-            textSize(120);
-            text("PLAY", textPlayX, textPlayY);
-        }
-        // If not, do blinking
-        else if (frameCount % 60 < 30) {
-            fill("#fbb040");
-            textSize(120);
-            text("PLAY", textPlayX, textPlayY);
+    // Checks distance from mouse to text, displays text when hovering
+    if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
+        fill("#ffdaa3ff");
+        textSize(120);
+        text("PLAY", textPlayX, textPlayY);
+    }
+    // If not, do blinking
+    else if (frameCount % 60 < 30) {
+        fill("#fbb040");
+        textSize(120);
+        text("PLAY", textPlayX, textPlayY);
         }
 }
 
@@ -1118,6 +1125,7 @@ function mousePressed() {
     if (!gameStart) {
         let textPlayX = width / 2;
         let textPlayY = height / 2 + 175;
+
         // Checks if mouse is hovering over PLAY
         if (dist(mouseX, mouseY, textPlayX, textPlayY) < hoverRadius) {
             resetGame();
@@ -1140,6 +1148,7 @@ function mousePressed() {
     if (gameLoss) {
         let retryX = width / 2;
         let retryY = height / 2 + 150;
+
         // Checks if mouse is hovering over Retry?
         if (dist(mouseX, mouseY, retryX, retryY) < hoverRadius) {
             resetGame();
