@@ -8,7 +8,7 @@
  * Instructions:
  * - Move the frog with your mouse
  * - Click to launch the tongue
- * - Catch enough flies before the toad eats them all
+ * - Catch enough flies before the gluttinous toad eats them all
  * 
  * Made with p5
  * https://p5js.org/
@@ -51,10 +51,20 @@ let toad = {
         w: 20,
         h: 42,
     },
-    // Dimensions of red hypno toad's eyes
-    hypnoEyesR: {
+    // Dimensions of pink hypno toad's eyes
+    hypnoEyesP: {
+        w: 29,
+        h: 46,
+    },
+    // Dimensions of purple hypno toad's eyes
+    hypnoEyesPurple: {
         w: 23,
-        h: 45,
+        h: 42,
+    },
+    // Dimensions of pink hypno toad's eyes
+    hypnoEyesBlue: {
+        w: 30,
+        h: 50,
     }
 };
 
@@ -82,6 +92,8 @@ let gameLoss = false;
 // Utilizing variable to more easily access the original width/height
 let originalWidthB = toad.hypnoEyesB.w;
 let originalHeightB = toad.hypnoEyesB.h;
+let originalHeightPurple = toad.hypnoEyesPurple.h;
+let originalHeightPink = toad.hypnoEyesP.h;
 
 // Helps set the speed for both dimensions
 let hypnoSpeedW = 1.45;
@@ -89,7 +101,9 @@ let hypnoSpeedH = 1.45;
 
 // Boolean for shrinking effect
 let shrinkingW = true;
-let shrinkingH = true;
+let shrinkingHB = true;
+let shrinkingHPurple = true;
+let shrinkingHPink = true;
 
 // Width animation for black hypno eyes
 // Interval allows for continuous loop
@@ -97,7 +111,9 @@ setInterval(() => {
     if (shrinkingW) {
         // Shrinking effect for width
         toad.hypnoEyesB.w -= hypnoSpeedW;
-        toad.hypnoEyesR.w -= hypnoSpeedW;
+        toad.hypnoEyesP.w -= hypnoSpeedW;
+        toad.hypnoEyesPurple.w -= hypnoSpeedW;
+        toad.hypnoEyesBlue.w -= hypnoSpeedW;
         // Stops the width from shrinking once it reaches 0.3x of it's original size
         if (toad.hypnoEyesB.w <= originalWidthB * 0.3) {
             toad.hypnoEyesB.w = originalWidthB * 0.3;
@@ -106,7 +122,9 @@ setInterval(() => {
         // Expands the eye back to its original width once it reaches its minimum
     } else {
         toad.hypnoEyesB.w += hypnoSpeedW;
-        toad.hypnoEyesR.w += hypnoSpeedW;
+        toad.hypnoEyesP.w += hypnoSpeedW;
+        toad.hypnoEyesPurple.w += hypnoSpeedW;
+        toad.hypnoEyesBlue.w += hypnoSpeedW;
         if (toad.hypnoEyesB.w >= originalWidthB) {
             toad.hypnoEyesB.w = originalWidthB;
             shrinkingW = true;
@@ -118,20 +136,64 @@ setInterval(() => {
 // Height animation for black hypno eyes
 // Interval allows for continuous loop
 setInterval(() => {
-    if (shrinkingH) {
+    if (shrinkingHB) {
         // Shrinking effect for height
         toad.hypnoEyesB.h -= hypnoSpeedH;
         // Stops the height from shrinking once it reaches 0.3x of it's original size
-        if (toad.hypnoEyesB.h <= originalHeightB * 0.3) {
-            toad.hypnoEyesB.h = originalHeightB * 0.3;
-            shrinkingH = false;
+        if (toad.hypnoEyesB.h <= originalHeightB * 0.6) {
+            toad.hypnoEyesB.h = originalHeightB * 0.6;
+            shrinkingHB = false;
         }
         // Expands the eye back to its original height once it reaches its minimum
     } else {
         toad.hypnoEyesB.h += hypnoSpeedH;
         if (toad.hypnoEyesB.h >= originalHeightB) {
             toad.hypnoEyesB.h = originalHeightB;
-            shrinkingH = true;
+            shrinkingHB = true;
+        }
+    }
+},
+    40);
+
+// Height animation for PURPLE hypno eyes
+// Interval allows for continuous loop
+setInterval(() => {
+    if (shrinkingHPurple) {
+        // Shrinking effect for height
+        toad.hypnoEyesPurple.h -= hypnoSpeedH;
+        // Stops the height from shrinking once it reaches 0.3x of it's original size
+        if (toad.hypnoEyesPurple.h <= originalHeightPurple * 0.7) {
+            toad.hypnoEyesPurple.h = originalHeightPurple * 0.7;
+            shrinkingHPurple = false;
+        }
+        // Expands the eye back to its original height once it reaches its minimum
+    } else {
+        toad.hypnoEyesPurple.h += hypnoSpeedH;
+        if (toad.hypnoEyesPurple.h >= originalHeightPurple) {
+            toad.hypnoEyesPurple.h = originalHeightPurple;
+            shrinkingHPurple = true;
+        }
+    }
+},
+    40);
+
+// Height animation for PINK hypno eyes
+// Interval allows for continuous loop
+setInterval(() => {
+    if (shrinkingHPink) {
+        // Shrinking effect for height
+        toad.hypnoEyesP.h -= hypnoSpeedH;
+        // Stops the height from shrinking once it reaches 0.3x of it's original size
+        if (toad.hypnoEyesP.h <= originalHeightPink * 0.8) {
+            toad.hypnoEyesP.h = originalHeightPink * 0.8;
+            shrinkingHPink = false;
+        }
+        // Expands the eye back to its original height once it reaches its minimum
+    } else {
+        toad.hypnoEyesP.h += hypnoSpeedH;
+        if (toad.hypnoEyesP.h >= originalHeightPink) {
+            toad.hypnoEyesP.h = originalHeightPink;
+            shrinkingHPink = true;
         }
     }
 },
@@ -160,10 +222,17 @@ setInterval(function () {
 let titleImage;
 let titleFont;
 
-// Preloads my title image and font
+// Defines soundbyte variables
+let frogEatFly;
+let toadEatFly;
+let ambientCroaking;
+
+// Preloads my title image, font and sounds
 function preload() {
     titleImage = loadImage("../assets/images/battleofthebog.png");
     titleFont = loadFont("../assets/fonts/pixelgame.otf");
+    frogEatFly = loadSound("../assets/sounds/frogeat.wav");
+    toadEatFly = loadSound("../assets/sounds/toadeat.wav");
 }
 
 /**
@@ -319,8 +388,8 @@ function lightGradient() {
     push();
 
     let lightRadius = 55;
-    let innerCol = color("#e2ba54ff");
-    let outerCol = color("#e4cb8dff");
+    let innerCol = color("#fe67998a");
+    let outerCol = color("#aa11fc8f");
 
     for (let r = lightRadius; r > 0; r--) {
         let m = map(r, 0, lightRadius, 0, 1);
@@ -715,7 +784,7 @@ function drawToad() {
     // Draws the left eye
     push();
     noStroke();
-    fill("#c3da30ff");
+    fill("#FCFF70");
     translate(toad.body.x, toad.body.y);
     rotate(40);
     ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
@@ -724,34 +793,70 @@ function drawToad() {
     // Draws the right eye
     push();
     noStroke();
-    fill("#c3da30ff");
+    fill("#FCFF70");
     translate(toad.body.x, toad.body.y);
     rotate(4);
     ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.eyes.w * bodyWidthToad, toad.eyes.h * bodyWidthToad);
     pop();
 
-    // Draws the left hypno RED eye
+    // Draws the left hypno BLUE eye
     push();
     noStroke();
-    fill("#ac2601ff");
+    fill("#6C0AFB");
     translate(toad.body.x, toad.body.y);
     rotate(40);
-    ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.hypnoEyesBlue.w * bodyWidthToad, toad.hypnoEyesBlue.h * bodyWidthToad);
     pop();
 
-    // Draws the right hypno RED eye
+    // Draws the right hypno BLUE eye
     push();
     noStroke();
-    fill("#ac2601ff");
+    fill("#6C0AFB");
     translate(toad.body.x, toad.body.y);
     rotate(4);
-    ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.hypnoEyesR.w * bodyWidthToad, toad.hypnoEyesR.h * bodyWidthToad);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.hypnoEyesBlue.w * bodyWidthToad, toad.hypnoEyesBlue.h * bodyWidthToad);
+    pop();
+
+    // Draws the left hypno PINK eye
+    push();
+    noStroke();
+    fill("#FE679A");
+    translate(toad.body.x, toad.body.y);
+    rotate(40);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.hypnoEyesP.w * bodyWidthToad, toad.hypnoEyesP.h * bodyWidthToad);
+    pop();
+
+    // Draws the right hypno PINK eye
+    push();
+    noStroke();
+    fill("#FE679A");
+    translate(toad.body.x, toad.body.y);
+    rotate(4);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.hypnoEyesP.w * bodyWidthToad, toad.hypnoEyesP.h * bodyWidthToad);
+    pop();
+
+    // Draws the left hypno PURPLE eye
+    push();
+    noStroke();
+    fill("#A811FC");
+    translate(toad.body.x, toad.body.y);
+    rotate(40);
+    ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.hypnoEyesPurple.w * bodyWidthToad, toad.hypnoEyesPurple.h * bodyWidthToad);
+    pop();
+
+    // Draws the right hypno PURPLE eye
+    push();
+    noStroke();
+    fill("#A811FC");
+    translate(toad.body.x, toad.body.y);
+    rotate(4);
+    ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.hypnoEyesPurple.w * bodyWidthToad, toad.hypnoEyesPurple.h * bodyWidthToad);
     pop();
 
     // Draws the left hypno BLACK eye
     push();
     noStroke();
-    fill("#000000ff");
+    fill("#110920");
     translate(toad.body.x, toad.body.y);
     rotate(40);
     ellipse(0 + 40, 0 - (20 + eyeDisplacementT), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
@@ -760,7 +865,7 @@ function drawToad() {
     // Draws the right hypno BLACK eye
     push();
     noStroke();
-    fill("#000000ff");
+    fill("#110920");
     translate(toad.body.x, toad.body.y);
     rotate(4);
     ellipse(0 + 40, 0 + (20 + eyeDisplacementT), toad.hypnoEyesB.w * bodyWidthToad, toad.hypnoEyesB.h * bodyWidthToad);
@@ -853,6 +958,8 @@ function checkTongueFlyOverlap() {
     if (eaten) {
         // Reset the fly
         resetFly();
+        // Plays frog eat sound
+        frogEatFly.play();
         // Increase frog's size
         bodyWidthFrog += 0.03;
         // Moves eyes apart on X axis
@@ -887,10 +994,12 @@ function checkFlyToadOverlap() {
 
     // Distance between fly and toad mouth
     let flyMouthDistance = dist(fly.x, fly.y, mouthX, mouthY);
-
+    // Eats the fly
     if (flyMouthDistance < mouthToadRadius + flyRadius) {
         // Respawn the fly
         resetFly();
+        //Plays toad eat sound
+        toadEatFly.play();
         // Increase toad's size
         bodyWidthToad += 0.05;
         // Moves eyes apart on Y axis
@@ -951,7 +1060,7 @@ function showWinScreen() {
 function showLossScreen() {
 
     let hoverRadius = 100;
-    background("#4b3617ff");
+    background("#6C0AFB");
     textSize(120);
     fill("#fff");
     text(":(", width / 2, height / 2 - 50);
@@ -1018,6 +1127,9 @@ function mousePressed() {
     }
 }
 
+/**
+ * Resets the game state when starting anew
+ */
 function resetGame() {
     gameWin = false;
     gameLoss = false;
@@ -1037,9 +1149,11 @@ function resetGame() {
     resetFly();
 }
 
+/**
+ * Moves the toad to the current fly in order to eat it
+ */
 function moveToad() {
     let diffY = fly.y - toad.body.y;
     let offset = diffY / 60;
     toad.body.y += offset;
 }
-
