@@ -1,53 +1,68 @@
 // Button positions
 let easy = {
-  x: 100,
-  y: 220,
-  w: 200,
-  h: 60,
+  x: 420,
+  y: 451,
+  w: 250,
+  h: 40,
   state: "green-variation",
   setup: greenSetup,
   label: "Easy"
 };
 
 let medium = {
-  x: 100,
-  y: 320,
-  w: 200,
-  h: 60,
+  x: 420,
+  y: 533,
+  w: 250,
+  h: 40,
   state: "blue-variation",
   setup: blueSetup,
   label: "Medium"
 };
 
 let hard = {
-  x: 100,
-  y: 420,
-  w: 200,
-  h: 60,
+  x: 420,
+  y: 616,
+  w: 250,
+  h: 40,
   state: "red-variation",
   setup: redSetup,
   label: "Hard"
 };
 
-
 function menuDraw() {
-  background(0);
+  drawScrollingBackgrounds();
+  image(bgMenu, 0, 0, width, height);
+
   textAlign(CENTER, CENTER);
-  textSize(28);
+  textFont(selectText);
 
   drawButton(easy);
   drawButton(medium);
   drawButton(hard);
+
+  blinkingText();
 }
 
 function drawButton(button) {
-  // Rectangle
-  fill(50);
-  rect(button.x, button.y, button.w, button.h, 10);
+  let hoverRadius = 20;
 
-  // Text
-  fill(255);
-  text(button.label, button.x + button.w/2, button.y + button.h/2);
+  // Text Center
+  let buttonCenterX = button.x + button.w / 2;
+  let buttonCenterY = button.y + button.h / 2;
+
+  // Check if mouse is within hover radius
+  let hovering = dist(mouseX, mouseY, buttonCenterX, buttonCenterY) < hoverRadius;
+
+  // Change text color on hover
+  if (hovering) {
+    fill("#A73786");
+  } else {
+    fill("#9855CC");
+  }
+
+  // Draws the text
+  textSize(36);
+  text(button.label, buttonCenterX, buttonCenterY);
 }
 
 
@@ -78,3 +93,28 @@ function menuMousePressed() {
   }
 }
 
+function blinkingText() {
+   // Blinking text in center
+  if (frameCount % 60 < 30) {
+    fill("#8E2C81");
+    textSize(24);
+    text("Select level", width / 2 + 9, height / 2 + 50);
+  }
+}
+
+function drawScrollingBackgrounds() {
+  for (let i = 0; i < bgLayers.length; i++) {
+
+    // Move layer
+    bgX[i] -= bgSpeed[i];
+
+    // Reset when off screen
+    if (bgX[i] <= -width) {
+      bgX[i] = 0;
+    }
+
+    // Draw TWO copies for seamless looping
+    image(bgLayers[i], bgX[i], 0, width, height);
+    image(bgLayers[i], bgX[i] + width, 0, width, height);
+  }
+}
