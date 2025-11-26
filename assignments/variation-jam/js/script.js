@@ -18,9 +18,20 @@ let bgLayers = [];
 let bgX = [];
 let bgSpeed = [];
 
+// Speeder Sprite Animations
+let speederTurnOn;
+let speederMovement;
+let speederMotion;
+
+// Global flag for menu background scrolling
+let menuScrolling = true;
+
+// Variation-specific flags
+let greenScrolling = false;
+
 function preload() {
     // Preloads Menu UI Image
-    bgMenu = loadImage("assets/sprites/Menu/TimeBurnerMenuHalf.png");
+    bgMenu = loadImage("assets/sprites/Menu/TimeBurnerMenuTitleDark.png");
     // Preloads font
     selectText = loadFont("assets/fonts/pixelgame.otf");
     // Preloads background images
@@ -33,13 +44,33 @@ function preload() {
     bgX = [0, 0, 0, 0, 0];
     // Speed for each layer
     bgSpeed = [1, 2, 3, 4, 5];
+
+    // Preloads different buttons/states for hover, normal, and pressed
+    easy.img = loadImage("assets/sprites/buttons/normal/EasyNormal.png");
+    easy.imgHover = loadImage("assets/sprites/buttons/hover/EasyHover.png");
+    easy.imgPressed = loadImage("assets/sprites/buttons/pressed/EasyPressed.png");
+
+    medium.img = loadImage("assets/sprites/buttons/normal/MediumNormal.png");
+    medium.imgHover = loadImage("assets/sprites/buttons/hover/MediumHover.png");
+    medium.imgPressed = loadImage("assets/sprites/buttons/pressed/MediumPressed.png");
+
+    hard.img = loadImage("assets/sprites/buttons/normal/HardNormal.png");
+    hard.imgHover = loadImage("assets/sprites/buttons/hover/HardHover.png");
+    hard.imgPressed = loadImage("assets/sprites/buttons/pressed/HardPressed.png");
+
+    //platform = loadImage("assets/sprites/");
+
+    // Preloads Speeder Animations
+    speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOn.png");
+    speederMovement = loadImage("assets/sprites/SpeederAnims/BurnerMotion/SpeederAfterburnerMotion.png");
 }
 
 /**
  * Create the canvas
 */
 function setup() {
-    createCanvas(1080, 720);
+  createCanvas(1080, 720);
+  speederMotion = new Sprite(speederMovement, 0, 0);
 }
 
 
@@ -81,5 +112,58 @@ function mousePressed() {
         case "blue-variation":
             blueMousePressed();
             break;
+    }
+}
+
+/**
+ * Listen for key pressed and call the function for it in the
+ * current state
+ */
+function keyPressed() {
+  switch (state) {
+    case "green-variation":
+      greenKeyPressed();
+      break;
+    case "red-variation":
+      redKeyPressed();
+      break;
+    case "blue-variation":
+      blueKeyPressed();
+      break;
+  }
+}
+
+// Scrolling layered background
+function drawScrollingBackgrounds(scrollActive) {
+  for (let i = 0; i < bgLayers.length; i++) {
+
+    if (scrollActive) {
+      bgX[i] -= bgSpeed[i];
+    }
+
+    if (bgX[i] <= -width) {
+      bgX[i] = 0;
+    }
+
+    image(bgLayers[i], bgX[i], 0, width, height);
+    image(bgLayers[i], bgX[i] + width, 0, width, height);
+  }
+}
+
+function Sprite(sheet, x, y) {
+    this.sheet = sheet;
+    this.x = x;
+    this.y = y;
+    this.h = sheet.height;
+    this.frame = 0;
+    this.frames = sheet.width / sheet.height;
+
+    this.draw = function () {
+        image(this.sheet, this.x, this.y, this.h, this.h, this.h * floor(this.frame), 0, this.h, this.h);
+
+        this.frame += 0.1;
+        if (this.frame > this.frames) {
+            this.frame = 0;
+        }
     }
 }

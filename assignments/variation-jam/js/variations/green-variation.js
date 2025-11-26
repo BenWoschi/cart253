@@ -8,28 +8,22 @@
  * This will be called just before the green variation starts
  */
 function greenSetup() {
-
+    greenScrolling = false;
 }
 
 /**
  * This will be called every frame when the green variation is active
  */
 function greenDraw() {
-    background("green");
+    drawScrollingBackgrounds(greenScrolling);
+    speederMotion.draw();
 }
 
 /**
  * This will be called whenever a key is pressed while the green variation is active
  */
-function greenKeyPressed(event) {
-    if (event.keyCode === 27) {
-        state = "menu";
-    }
-}
-
-/**
- * This will be called whenever the mouse is pressed while the green variation is active
- */
-function greenMousePressed() {
-
+function greenKeyPressed() {
+  if (key === 'R' || key === 'r') {
+    greenScrolling = true;
+  }
 }

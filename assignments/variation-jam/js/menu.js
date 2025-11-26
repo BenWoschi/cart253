@@ -1,40 +1,107 @@
-// Button positions
+// Buttons
 let easy = {
   x: 420,
   y: 451,
-  w: 250,
-  h: 40,
+  w: 258,
+  h: 69,
   state: "green-variation",
   setup: greenSetup,
-  label: "Easy"
+  img: null,
+  imgHover: null,
+  imgPressed: null,
+  isPressed: false,
+  hover: false
 };
 
 let medium = {
   x: 420,
   y: 533,
-  w: 250,
-  h: 40,
+  w: 258,
+  h: 69,
   state: "blue-variation",
   setup: blueSetup,
-  label: "Medium"
+  img: null,
+  imgHover: null,
+  imgPressed: null,
+  isPressed: false,
+  hover: false
 };
 
 let hard = {
   x: 420,
   y: 616,
-  w: 250,
-  h: 40,
+  w: 258,
+  h: 69,
   state: "red-variation",
   setup: redSetup,
-  label: "Hard"
+  img: null,
+  imgHover: null,
+  imgPressed: null,
+  isPressed: false,
+  hover: false
 };
 
+// Checks if mouse is inside the button rectangle
+function near(button) {
+  return mouseX > button.x && mouseX < button.x + button.w &&
+         mouseY > button.y && mouseY < button.y + button.h;
+}
+
+// Draws button in either normal, hover or pressed state
+function drawButton(button) {
+  let imgShow = button.img;
+
+  if (button.isPressed) {
+    imgShow = button.imgPressed;
+  } else if (button.hover) {
+    imgShow = button.imgHover;
+  }
+
+  image(imgShow, button.x, button.y, button.w, button.h);
+}
+
+// Updates button states
+function updateButtons() {
+
+  // Update hover state
+  easy.hover = near(easy);
+  medium.hover = near(medium);
+  hard.hover = near(hard);
+
+  // Checks mouse pressed
+  if (mouseIsPressed) {
+    if (easy.hover) easy.isPressed = true;
+    if (medium.hover) medium.isPressed = true;
+    if (hard.hover) hard.isPressed = true;
+  } else {
+    
+    // Only triggers state change when mouse is released while hovering on the button
+    if (easy.isPressed && easy.hover) {
+      state = easy.state;
+      easy.setup();
+    }
+    if (medium.isPressed && medium.hover) {
+      state = medium.state;
+      medium.setup();
+    }
+    if (hard.isPressed && hard.hover) {
+      state = hard.state;
+      hard.setup();
+    }
+
+    // Resets pressed states
+    easy.isPressed = false;
+    medium.isPressed = false;
+    hard.isPressed = false;
+  }
+}
+
+// Draws Menu
 function menuDraw() {
-  drawScrollingBackgrounds();
+  drawScrollingBackgrounds(menuScrolling);
   image(bgMenu, 0, 0, width, height);
 
-  textAlign(CENTER, CENTER);
-  textFont(selectText);
+  updateButtons();
 
   drawButton(easy);
   drawButton(medium);
@@ -43,78 +110,12 @@ function menuDraw() {
   blinkingText();
 }
 
-function drawButton(button) {
-  let hoverRadius = 20;
-
-  // Text Center
-  let buttonCenterX = button.x + button.w / 2;
-  let buttonCenterY = button.y + button.h / 2;
-
-  // Check if mouse is within hover radius
-  let hovering = dist(mouseX, mouseY, buttonCenterX, buttonCenterY) < hoverRadius;
-
-  // Change text color on hover
-  if (hovering) {
-    fill("#A73786");
-  } else {
-    fill("#9855CC");
-  }
-
-  // Draws the text
-  textSize(36);
-  text(button.label, buttonCenterX, buttonCenterY);
-}
-
-
-function menuMousePressed() {
-  // Easy button
-  if (
-    mouseX > easy.x && mouseX < easy.x + easy.w &&
-    mouseY > easy.y && mouseY < easy.y + easy.h
-  ) {
-    state = easy.state;
-    easy.setup();
-  }
-  // Medium button
-  else if (
-    mouseX > medium.x && mouseX < medium.x + medium.w &&
-    mouseY > medium.y && mouseY < medium.y + medium.h
-  ) {
-    state = medium.state;
-    medium.setup();
-  }
-  // Hard button
-  else if (
-    mouseX > hard.x && mouseX < hard.x + hard.w &&
-    mouseY > hard.y && mouseY < hard.y + hard.h
-  ) {
-    state = hard.state;
-    hard.setup();
-  }
-}
-
+// Allows text to repeatedly blink
 function blinkingText() {
-   // Blinking text in center
   if (frameCount % 60 < 30) {
     fill("#8E2C81");
     textSize(24);
-    text("Select level", width / 2 + 9, height / 2 + 50);
-  }
-}
-
-function drawScrollingBackgrounds() {
-  for (let i = 0; i < bgLayers.length; i++) {
-
-    // Move layer
-    bgX[i] -= bgSpeed[i];
-
-    // Reset when off screen
-    if (bgX[i] <= -width) {
-      bgX[i] = 0;
-    }
-
-    // Draw TWO copies for seamless looping
-    image(bgLayers[i], bgX[i], 0, width, height);
-    image(bgLayers[i], bgX[i] + width, 0, width, height);
+    textFont(selectText);
+    text("Select level", width / 2 - 45, height / 2 + 70);
   }
 }
