@@ -20,6 +20,7 @@ let bgSpeed = [];
 
 // Speeder Sprite Animations
 let speederTurnOn;
+let speederOn;
 let speederMovement;
 let speederMotion;
 
@@ -28,6 +29,9 @@ let menuScrolling = true;
 
 // Variation-specific flags
 let greenScrolling = false;
+
+// Objects
+let platform;
 
 function preload() {
     // Preloads Menu UI Image
@@ -58,7 +62,8 @@ function preload() {
     hard.imgHover = loadImage("assets/sprites/buttons/hover/HardHover.png");
     hard.imgPressed = loadImage("assets/sprites/buttons/pressed/HardPressed.png");
 
-    //platform = loadImage("assets/sprites/");
+    // Preloads objects
+    platform = loadImage("assets/sprites/platform/SpeederPlatform.gif");
 
     // Preloads Speeder Animations
     speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOn.png");
@@ -70,7 +75,8 @@ function preload() {
 */
 function setup() {
   createCanvas(1080, 720);
-  speederMotion = new Sprite(speederMovement, 0, 0);
+  speederMotion = new Sprite(speederMovement, 0, 0, 15, 960);
+  speederOn = new Sprite(speederTurnOn, 0, 200, 37, 2368);
 }
 
 
@@ -150,20 +156,28 @@ function drawScrollingBackgrounds(scrollActive) {
   }
 }
 
-function Sprite(sheet, x, y) {
-    this.sheet = sheet;
-    this.x = x;
-    this.y = y;
-    this.h = sheet.height;
-    this.frame = 0;
-    this.frames = sheet.width / sheet.height;
+function Sprite(sheet, x, y, numberFrames, sheetWidth) {
+  this.sheet = sheet;
+  this.x = x;
+  this.y = y;
+  this.h = sheet.height;
+  this.frame = 0;
+  this.scale = 2;
+  this.frames = numberFrames;
+  this.sheetWidth = sheetWidth;
+  this.frameWidth = this.sheetWidth / this.frames;
 
-    this.draw = function () {
-        image(this.sheet, this.x, this.y, this.h, this.h, this.h * floor(this.frame), 0, this.h, this.h);
-
-        this.frame += 0.1;
-        if (this.frame > this.frames) {
-            this.frame = 0;
-        }
-    }
+  this.draw = function () {
+    image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
+      this.frame += 0.5;
+      if (this.frame >= this.frames) {
+          this.frame = 0;
+      }
+  }
+  this.drawOnce = function () {
+    image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
+      if (this.frame < this.frames) {
+          this.frame += 0.5;
+      }
+  }
 }

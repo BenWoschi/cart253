@@ -16,7 +16,8 @@ function greenSetup() {
  */
 function greenDraw() {
     drawScrollingBackgrounds(greenScrolling);
-    speederMotion.draw();
+  speederMotion.draw();
+  speederOn.drawOnce();
 }
 
 /**
