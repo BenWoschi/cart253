@@ -15,16 +15,58 @@ function greenSetup() {
  * This will be called every frame when the green variation is active
  */
 function greenDraw() {
-    drawScrollingBackgrounds(greenScrolling);
+  drawScrollingBackgrounds(greenScrolling);
   speederMotion.draw();
-  speederOn.drawOnce();
+  startingPlatform();
+  
+  if (!rPressedDecoy) {
+    drawSpeederDecoy();
+  }
+
+// Plays the speeder turn on animation
+  if (playingStartAnimation) {
+    speederOn.drawOnceStart();
+
+    // Checks if the animation has finished
+    if (speederOn.frame >= speederOn.frames - 1) {
+      playingStartAnimation = false;
+      animationFinished = true;
+    }
+    return;
+  }
+
+  // When animation finishes, start scrolling the other elements
+  if (animationFinished) {
+    greenScrolling = true;
+  }
 }
 
 /**
  * This will be called whenever a key is pressed while the green variation is active
  */
 function greenKeyPressed() {
+  // Blocks future r presses
+  if (rAlreadyUsed) return;
+
   if (key === 'R' || key === 'r') {
-    greenScrolling = true;
+
+    rAlreadyUsed = true;
+
+    rPressedDecoy = true;
+
+    // reset animation frame
+    speederOn.frame = 0;
+
+    playingStartAnimation = true;
+    animationFinished = false;
+  }
+}
+
+function startingPlatform() {
+
+  image(platform, platformX, platformY, image.width, image.height);
+
+  if (greenScrolling) {
+    platformX -= 5;
   }
 }

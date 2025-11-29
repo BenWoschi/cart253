@@ -23,6 +23,17 @@ let speederTurnOn;
 let speederOn;
 let speederMovement;
 let speederMotion;
+let speederDecoy;
+
+// Checks for animation state with speeder turnOn
+let playingStartAnimation = false;
+let animationFinished = false;
+
+// Prevents "r" from being pressed again
+let rAlreadyUsed = false;
+
+// Decoy is displayed until r is pressed
+let rPressedDecoy = false;
 
 // Global flag for menu background scrolling
 let menuScrolling = true;
@@ -30,8 +41,10 @@ let menuScrolling = true;
 // Variation-specific flags
 let greenScrolling = false;
 
-// Objects
+// Starting Platform
 let platform;
+let platformX = 50;
+let platformY = 300;
 
 function preload() {
     // Preloads Menu UI Image
@@ -68,6 +81,7 @@ function preload() {
     // Preloads Speeder Animations
     speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOn.png");
     speederMovement = loadImage("assets/sprites/SpeederAnims/BurnerMotion/SpeederAfterburnerMotion.png");
+    speederDecoy = loadImage("assets/sprites/SpeederStill.png");
 }
 
 /**
@@ -76,7 +90,7 @@ function preload() {
 function setup() {
   createCanvas(1080, 720);
   speederMotion = new Sprite(speederMovement, 0, 0, 15, 960);
-  speederOn = new Sprite(speederTurnOn, 0, 200, 37, 2368);
+  speederOn = new Sprite(speederTurnOn, 120, 300, 37, 2368);
 }
 
 
@@ -174,10 +188,22 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
           this.frame = 0;
       }
   }
-  this.drawOnce = function () {
+  this.drawOnceStart = function () {
     image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       if (this.frame < this.frames) {
-          this.frame += 0.5;
+          this.frame += 0.3;
       }
   }
 }
+
+function drawSpeederDecoy() {
+  // Does not draw is r was pressed
+  if (rPressedDecoy) return;
+
+  let decoyWidth = 2;
+  let decoyHeight = 2;
+
+  image(
+    speederDecoy, 120, 312, speederDecoy.width * decoyWidth, speederDecoy.height * decoyHeight);
+}
+
