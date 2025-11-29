@@ -79,7 +79,7 @@ function preload() {
     platform = loadImage("assets/sprites/platform/SpeederPlatform.gif");
 
     // Preloads Speeder Animations
-    speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOn.png");
+    speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOnStart.png");
     speederMovement = loadImage("assets/sprites/SpeederAnims/BurnerMotion/SpeederAfterburnerMotion.png");
     speederDecoy = loadImage("assets/sprites/SpeederStill.png");
 }
@@ -90,7 +90,7 @@ function preload() {
 function setup() {
   createCanvas(1080, 720);
   speederMotion = new Sprite(speederMovement, 0, 0, 15, 960);
-  speederOn = new Sprite(speederTurnOn, 120, 300, 37, 2368);
+  speederOn = new Sprite(speederTurnOn, 120, 300, 48, 3072);
 }
 
 
@@ -191,13 +191,13 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
   this.drawOnceStart = function () {
     image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       if (this.frame < this.frames) {
-          this.frame += 0.3;
+          this.frame += 0.25;
       }
   }
 }
 
 function drawSpeederDecoy() {
-  // Does not draw is r was pressed
+  // Does not draw if r was pressed
   if (rPressedDecoy) return;
 
   let decoyWidth = 2;
