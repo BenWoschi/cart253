@@ -116,6 +116,6 @@ function blinkingText() {
     fill("#8E2C81");
     textSize(24);
     textFont(selectText);
-    text("Select level", width / 2 - 45, height / 2 + 70);
+    text("Select Difficulty", width / 2 - 67, height / 2 + 70);
   }
 }

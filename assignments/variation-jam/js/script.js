@@ -24,6 +24,8 @@ let speederOn;
 let speederMovement;
 let speederMotion;
 let speederDecoy;
+let timeburn;
+let timeburnUse;
 
 // Checks for animation state with speeder turnOn
 let playingStartAnimation = false;
@@ -77,6 +79,9 @@ function preload() {
 
     // Preloads objects
     platform = loadImage("assets/sprites/platform/SpeederPlatform.gif");
+  
+    // Preloads Time FX
+    timeburn = loadImage("assets/sprites/FX/Timechange.png");
 
     // Preloads Speeder Animations
     speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOnStart.png");
@@ -89,8 +94,9 @@ function preload() {
 */
 function setup() {
   createCanvas(1080, 720);
-  speederMotion = new Sprite(speederMovement, 0, 0, 15, 960);
+  speederMotion = new Sprite(speederMovement, 120, 299, 15, 960);
   speederOn = new Sprite(speederTurnOn, 120, 300, 48, 3072);
+  timeburnUse = new Sprite(timeburn, 200, 200, 12, 768);
 }
 
 
@@ -181,7 +187,29 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
   this.sheetWidth = sheetWidth;
   this.frameWidth = this.sheetWidth / this.frames;
 
+  // Default speeder state
+  this.controllable = false;
+  this.speed = 10;
+
+  // Allows for speeder movement when controllable = true
+  this.update = function () {
+    if (this.controllable) {
+      if (keyIsDown(87)) this.y -= this.speed; // W
+      if (keyIsDown(83)) this.y += this.speed; // S
+      if (keyIsDown(65)) this.x -= this.speed; // A
+      if (keyIsDown(68)) this.x += this.speed; // D
+    }
+    
+  let spriteW = this.frameWidth * this.scale;
+  let spriteH = this.h * this.scale;
+
+  // Constrains sprite to canvas
+  this.x = constrain(this.x, 0, width - spriteW);
+  this.y = constrain(this.y, 0, height - spriteH);
+  };
+
   this.draw = function () {
+    this.update();
     image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       this.frame += 0.5;
       if (this.frame >= this.frames) {
@@ -194,10 +222,16 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
           this.frame += 0.25;
       }
   }
+  this.drawOnceFX = function () {
+    image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
+      if (this.frame < this.frames) {
+          this.frame += 0.1;
+      }
+  }
 }
 
 function drawSpeederDecoy() {
-  // Does not draw if r was pressed
+  // Does not draw if "r" was pressed
   if (rPressedDecoy) return;
 
   let decoyWidth = 2;

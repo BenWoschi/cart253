@@ -16,8 +16,8 @@ function greenSetup() {
  */
 function greenDraw() {
   drawScrollingBackgrounds(greenScrolling);
-  speederMotion.draw();
   startingPlatform();
+  timeburnUse.drawOnceFX();
   
   if (!rPressedDecoy) {
     drawSpeederDecoy();
@@ -38,6 +38,8 @@ function greenDraw() {
   // When animation finishes, start scrolling the other elements
   if (animationFinished) {
     greenScrolling = true;
+    speederMotion.controllable = true;
+    speederMotion.draw();
   }
 }
 
