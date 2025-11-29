@@ -17,7 +17,7 @@ function greenSetup() {
 function greenDraw() {
   drawScrollingBackgrounds(greenScrolling);
   startingPlatform();
-  timeburnUse.drawOnceFX();
+  timeburnUse.drawFX();
   
   if (!rPressedDecoy) {
     drawSpeederDecoy();

@@ -191,7 +191,7 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
   this.controllable = false;
   this.speed = 10;
 
-  // Allows for speeder movement when controllable = true
+  // Allows for speeder movement when .controllable = true
   this.update = function () {
     if (this.controllable) {
       if (keyIsDown(87)) this.y -= this.speed; // W
@@ -222,7 +222,7 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
           this.frame += 0.25;
       }
   }
-  this.drawOnceFX = function () {
+  this.drawFX = function () {
     image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       if (this.frame < this.frames) {
           this.frame += 0.1;
