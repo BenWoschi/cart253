@@ -27,6 +27,12 @@ let speederDecoy;
 let timeburn;
 let timeburnUse;
 
+// Counts number of timeburn uses left and adds a delay
+let timeburnUsesLeft = 3;
+let isTimeburnPlaying = false;
+let isTimeburnOnCooldown = false;
+let timeburnCooldown = 5000;
+
 // Checks for animation state with speeder turnOn
 let playingStartAnimation = false;
 let animationFinished = false;
@@ -189,6 +195,7 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
 
   // Default speeder state
   this.controllable = false;
+  // Speeder "Speed"
   this.speed = 10;
 
   // Allows for speeder movement when .controllable = true
@@ -205,7 +212,7 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
 
   // Constrains sprite to canvas
   this.x = constrain(this.x, 0, width - spriteW);
-  this.y = constrain(this.y, 0, height - spriteH);
+  this.y = constrain(this.y, 0, height - spriteH);  
   };
 
   this.draw = function () {
@@ -240,4 +247,24 @@ function drawSpeederDecoy() {
   image(
     speederDecoy, 120, 312, speederDecoy.width * decoyWidth, speederDecoy.height * decoyHeight);
 }
+
+function triggerTimeburn() {
+    // Don't allow triggering unless everything is valid
+    if (timeburnUsesLeft > 0 && !isTimeburnPlaying && !isTimeburnOnCooldown) {
+
+        isTimeburnPlaying = true;
+        isTimeburnOnCooldown = true;
+        timeburnUsesLeft--;
+
+        // Reset sprite animation
+        timeburnUse.frame = 0;
+
+        // Start cooldown timer
+        setTimeout(() => {
+            isTimeburnOnCooldown = false;
+        }, timeburnCooldown);
+    }
+}
+
+
 

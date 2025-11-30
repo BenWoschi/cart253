@@ -17,8 +17,7 @@ function greenSetup() {
 function greenDraw() {
   drawScrollingBackgrounds(greenScrolling);
   startingPlatform();
-  timeburnUse.drawFX();
-  
+
   if (!rPressedDecoy) {
     drawSpeederDecoy();
   }
@@ -41,6 +40,14 @@ function greenDraw() {
     speederMotion.controllable = true;
     speederMotion.draw();
   }
+
+  if (isTimeburnPlaying) {
+    timeburnUse.drawFX();
+
+    if (timeburnUse.frame > timeburnUse.frames) {
+        isTimeburnPlaying = false;
+    }
+}
 }
 
 /**
@@ -62,6 +69,10 @@ function greenKeyPressed() {
     playingStartAnimation = true;
     animationFinished = false;
   }
+
+    if (keyCode === SHIFT) {
+        triggerTimeburn();
+    }
 }
 
 function startingPlatform() {
