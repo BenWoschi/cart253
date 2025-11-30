@@ -81,7 +81,7 @@ function preload() {
     platform = loadImage("assets/sprites/platform/SpeederPlatform.gif");
   
     // Preloads Time FX
-    timeburn = loadImage("assets/sprites/FX/Timechange.png");
+    timeburn = loadImage("assets/sprites/FX/speederTimechangeFix.png");
 
     // Preloads Speeder Animations
     speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOnStart.png");
@@ -96,7 +96,7 @@ function setup() {
   createCanvas(1080, 720);
   speederMotion = new Sprite(speederMovement, 120, 299, 15, 960);
   speederOn = new Sprite(speederTurnOn, 120, 300, 48, 3072);
-  timeburnUse = new Sprite(timeburn, 200, 200, 12, 768);
+  timeburnUse = new Sprite(timeburn, 200, 200, 12, 732);
 }
 
 
@@ -224,8 +224,8 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
   }
   this.drawFX = function () {
     image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
-      if (this.frame < this.frames) {
-          this.frame += 0.1;
+      if (this.frame <= this.frames) {
+          this.frame += 0.15;
       }
   }
 }
