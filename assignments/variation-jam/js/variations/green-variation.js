@@ -55,7 +55,7 @@ function greenDraw() {
  */
 function greenKeyPressed() {
   // Blocks future r presses
-  if (rAlreadyUsed) return;
+  if(!rAlreadyUsed){
 
   if (key === 'R' || key === 'r') {
 
@@ -69,8 +69,9 @@ function greenKeyPressed() {
     playingStartAnimation = true;
     animationFinished = false;
   }
+}
 
-    if (keyCode === SHIFT) {
+    if (keyCode === SHIFT && rAlreadyUsed) {
         triggerTimeburn();
     }
 }
