@@ -18,6 +18,24 @@ let bgLayers = [];
 let bgX = [];
 let bgSpeed = [];
 
+// Sets up arrays for object/obstacle spawns and spawn time
+let obstacleImages = [];
+let objects = [];
+let lastSpawnTime = 0;
+
+// Sets up the spawn delay for obstacles
+let minSpawnDelay = 1500;
+let maxSpawnDelay = 2500;
+
+// Prevents obstacles from spawning
+let spawningObstacles = false;
+
+// Weighted obstacle spawns, higher = more common
+let rarity = [5, 3, 2, 1, 1];
+
+// Speeds per obstacle type
+let speeds = [2, 3, 3, 1, 3];
+
 // Speeder Sprite Animations
 let speederTurnOn;
 let speederOn;
@@ -26,6 +44,8 @@ let speederMotion;
 let speederDecoy;
 let timeburn;
 let timeburnUse;
+let explosionSpeeder;
+let explosion;
 
 // Counts number of timeburn uses left and adds a delay
 let timeburnUsesLeft = 3;
@@ -86,13 +106,21 @@ function preload() {
     // Preloads objects
     platform = loadImage("assets/sprites/platform/SpeederPlatform.gif");
   
-    // Preloads Time FX
+    // Preloads FX
     timeburn = loadImage("assets/sprites/FX/speederTimechangeFix.png");
+    explosionSpeeder = loadImage("assets/sprites/FX/explosion.png");
 
     // Preloads Speeder Animations
     speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOnStart.png");
     speederMovement = loadImage("assets/sprites/SpeederAnims/BurnerMotion/SpeederAfterburnerMotion.png");
     speederDecoy = loadImage("assets/sprites/SpeederStill.png");
+  
+    // Preloads different obstacles
+    obstacleImages[0] = loadImage("assets/sprites/obstacles/square.png");
+    obstacleImages[1] = loadImage("assets/sprites/obstacles/rect.png");
+    obstacleImages[2] = loadImage("assets/sprites/obstacles/long-rect.png");
+    obstacleImages[3] = loadImage("assets/sprites/obstacles/bigrect.png");
+    obstacleImages[4] = loadImage("assets/sprites/obstacles/longer-rect.png");
 }
 
 /**
@@ -103,6 +131,7 @@ function setup() {
   speederMotion = new Sprite(speederMovement, 120, 299, 15, 960);
   speederOn = new Sprite(speederTurnOn, 120, 300, 48, 3072);
   timeburnUse = new Sprite(timeburn, 200, 200, 12, 732);
+  explosion = new Sprite(explosionSpeeder, 0, 0, 13, 832);
 }
 
 
@@ -229,8 +258,14 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
           this.frame += 0.25;
       }
   }
-this.drawFX = function () {
+  this.drawFX = function () {
     image(this.sheet, speederMotion.x + 10, speederMotion.y - 30, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
+      if (this.frame <= this.frames) {
+          this.frame += 0.15;
+      }
+  }
+  this.drawEX = function () {
+    image(this.sheet, speederMotion.x + 20, speederMotion.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       if (this.frame <= this.frames) {
           this.frame += 0.15;
       }
@@ -266,5 +301,51 @@ function triggerTimeburn() {
     }
 }
 
+// Weighted spawns for objects
+function pickWeightedIndex(weights) {
+  let total = 0;
+  for (let w of weights) total += w;
 
+  let r = random(total);
+  let running = 0;
 
+  for (let i = 0; i < weights.length; i++) {
+    running += weights[i];
+    if (r <= running) return i;
+  }
+}
+
+// Handles the scrolling object spawns, random rotations, spawnrate, and speed
+class ScrollObject {
+  constructor() {
+    // Chooses obstacle type
+    this.index = pickWeightedIndex(rarity);
+    this.img = obstacleImages[this.index];
+
+    this.x = width + 80;
+    this.y = random(60, height - 60);
+    this.speed = speeds[this.index];
+
+    // Spawns at random 90 degree angles
+    let angles = [0, HALF_PI, PI, PI + HALF_PI];
+    this.rotation = random(angles);
+  }
+  update() {
+    // Left movement on canvas
+    this.x -= this.speed;
+  }
+
+  draw() {
+    push();
+    translate(this.x, this.y);
+    rotate(this.rotation);
+    imageMode(CENTER);
+    image(this.img, 0, 0);
+    pop();
+  }
+
+  offscreen() {
+    return this.x < -200;
+  }
+
+}

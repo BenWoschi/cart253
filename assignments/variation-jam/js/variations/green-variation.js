@@ -47,7 +47,46 @@ function greenDraw() {
     if (timeburnUse.frame > timeburnUse.frames) {
         isTimeburnPlaying = false;
     }
+  }
+  
+  if (spawningObstacles) {
+  // Obstacle spawn timer
+  if (millis() - lastSpawnTime > random(minSpawnDelay, maxSpawnDelay)) {
+    objects.push(new ScrollObject());
+    lastSpawnTime = millis();
+  }
+
+  // Updates and draws obstacles
+  for (let i = objects.length - 1; i >= 0; i--) {
+    let obj = objects[i];
+    obj.update();
+    obj.draw();
+
+// Scalable speeder height
+let speederHeightFactor = 0.5;
+
+// Obstacle's radius
+let obstacleRadius = max(obj.img.width, obj.img.height) / 2 * 0.8;
+
+// Speeder detection radius
+let speederRadius = max(speederMotion.frameWidth / 2, speederMotion.h / 2 * speederHeightFactor);
+
+// Calculates the distance between both object centers
+let d = dist(obj.x, obj.y, speederMotion.x + speederMotion.frameWidth / 2, speederMotion.y + speederMotion.h / 2);
+
+  // Handles collision
+  if (d < obstacleRadius + speederRadius) {
+  explosion.drawEX();
+  console.log("HIT!");
 }
+
+    // remove obstacles offscreen
+    if (obj.offscreen()) {
+      objects.splice(i, 1);
+    }
+  }
+}
+
 }
 
 /**
@@ -57,7 +96,10 @@ function greenKeyPressed() {
   // Blocks future r presses
   if(!rAlreadyUsed){
 
-  if (key === 'R' || key === 'r') {
+    if (key === 'R' || key === 'r') {
+    
+    spawningObstacles = true;
+    lastSpawnTime = millis();
 
     rAlreadyUsed = true;
 
