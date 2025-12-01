@@ -47,6 +47,11 @@ let timeburnUse;
 let explosionSpeeder;
 let explosion;
 
+// Timeburn Icon and grayscale array for loop
+let burnIcon;
+let grayScale = [false, false, false];
+let nextToGray = 0;
+
 // Counts number of timeburn uses left and adds a delay
 let timeburnUsesLeft = 3;
 let isTimeburnPlaying = false;
@@ -114,6 +119,9 @@ function preload() {
     speederTurnOn = loadImage("assets/sprites/SpeederAnims/TurnOn/SpeederTurnOnStart.png");
     speederMovement = loadImage("assets/sprites/SpeederAnims/BurnerMotion/SpeederAfterburnerMotion.png");
     speederDecoy = loadImage("assets/sprites/SpeederStill.png");
+  
+    // Preloads timeburn icon
+    burnIcon = loadImage("assets/sprites/TimechangeIcon.png");
   
     // Preloads different obstacles
     obstacleImages[0] = loadImage("assets/sprites/obstacles/square.png");
@@ -325,10 +333,6 @@ class ScrollObject {
     this.x = width + 80;
     this.y = random(60, height - 60);
     this.speed = speeds[this.index];
-
-    // Spawns at random 90 degree angles
-    let angles = [0, HALF_PI, PI, PI + HALF_PI];
-    this.rotation = random(angles);
   }
   update() {
     // Left movement on canvas
@@ -338,7 +342,6 @@ class ScrollObject {
   draw() {
     push();
     translate(this.x, this.y);
-    rotate(this.rotation);
     imageMode(CENTER);
     image(this.img, 0, 0);
     pop();
@@ -349,3 +352,22 @@ class ScrollObject {
   }
 
 }
+
+function drawThreeBurnIcons() {
+  let startX = 920;
+  let y = 660;
+  let spacing = 45;
+  
+  for (let i = 0; i < 3; i++) {
+    if (grayScale[i]) {
+      tint(0, 0, 0);
+    } else {
+      noTint();
+    }
+
+    image(burnIcon, startX + i * spacing, y, 65, 40);
+  }
+
+  noTint();
+}
+

@@ -17,6 +17,7 @@ function greenSetup() {
 function greenDraw() {
   drawScrollingBackgrounds(greenScrolling);
   startingPlatform();
+  drawThreeBurnIcons();
 
   if (!rPressedDecoy) {
     drawSpeederDecoy();
@@ -50,42 +51,44 @@ function greenDraw() {
   }
   
   if (spawningObstacles) {
-  // Obstacle spawn timer
-  if (millis() - lastSpawnTime > random(minSpawnDelay, maxSpawnDelay)) {
-    objects.push(new ScrollObject());
-    lastSpawnTime = millis();
-  }
+    // Obstacle spawn timer
+    if (millis() - lastSpawnTime > random(minSpawnDelay, maxSpawnDelay)) {
+      objects.push(new ScrollObject());
+      lastSpawnTime = millis();
+    }
 
-  // Updates and draws obstacles
-  for (let i = objects.length - 1; i >= 0; i--) {
-    let obj = objects[i];
-    obj.update();
-    obj.draw();
+    // Updates and draws obstacles
+    for (let i = objects.length - 1; i >= 0; i--) {
+      let obj = objects[i];
+      obj.update();
+      obj.draw();
 
-// Scalable speeder height
-let speederHeightFactor = 0.5;
+      // Speeder rectangle collision
+      let w1 = obj.img.width;
+      let h1 = obj.img.height;
+      let w2 = speederMotion.frameWidth;
+      let h2 = speederMotion.h * 0.5; // your height factor
 
-// Obstacle's radius
-let obstacleRadius = max(obj.img.width, obj.img.height) / 2 * 0.8;
+      let speederCenterX = (speederMotion.x + 40) + speederMotion.frameWidth / 2;
+      let speederCenterY = speederMotion.y + speederMotion.h / 2;
 
-// Speeder detection radius
-let speederRadius = max(speederMotion.frameWidth / 2, speederMotion.h / 2 * speederHeightFactor);
+      let hitX = speederCenterX - w2 < obj.x + w1 / 2 &&
+        speederCenterX + w2 > obj.x - w1 / 2;
+      let hitY = speederCenterY - h2 / 2 < obj.y + h1 / 2 &&
+        speederCenterY + h2 / 2 > obj.y - h1 / 2;
 
-// Calculates the distance between both object centers
-let d = dist(obj.x, obj.y, speederMotion.x + speederMotion.frameWidth / 2, speederMotion.y + speederMotion.h / 2);
+      if (hitX && hitY) {
+        explosion.drawEX();
+        console.log("HIT!");
+      }
 
-  // Handles collision
-  if (d < obstacleRadius + speederRadius) {
-  explosion.drawEX();
-  console.log("HIT!");
-}
-
-    // remove obstacles offscreen
-    if (obj.offscreen()) {
-      objects.splice(i, 1);
+      // Remove offscreen
+      if (obj.offscreen()) {
+        objects.splice(i, 1);
+      }
     }
   }
-}
+  drawThreeBurnIcons();
 
 }
 
@@ -110,11 +113,16 @@ function greenKeyPressed() {
 
     playingStartAnimation = true;
     animationFinished = false;
+    }
   }
-}
 
     if (keyCode === SHIFT && rAlreadyUsed) {
-        triggerTimeburn();
+      if (nextToGray < 3 && !isTimeburnOnCooldown) {
+        // Sets icon to gray
+        grayScale[nextToGray] = true;
+        nextToGray++;
+      }
+      triggerTimeburn();
     }
 }
 
