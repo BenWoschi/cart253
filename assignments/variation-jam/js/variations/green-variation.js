@@ -66,10 +66,10 @@ function greenDraw() {
       // Speeder rectangle collision
       let w1 = obj.img.width;
       let h1 = obj.img.height;
-      let w2 = speederMotion.frameWidth;
+      let w2 = speederMotion.frameWidth * 0.85;
       let h2 = speederMotion.h * 0.5; // your height factor
 
-      let speederCenterX = (speederMotion.x + 40) + speederMotion.frameWidth / 2;
+      let speederCenterX = (speederMotion.x + 50) + speederMotion.frameWidth / 2;
       let speederCenterY = speederMotion.y + speederMotion.h / 2;
 
       let hitX = speederCenterX - w2 < obj.x + w1 / 2 &&
@@ -90,6 +90,12 @@ function greenDraw() {
   }
   drawThreeBurnIcons();
 
+   if (showPopUp) {
+    push();
+    drawPopUp();
+    pop();
+  }
+
 }
 
 /**
@@ -105,6 +111,8 @@ function greenKeyPressed() {
     lastSpawnTime = millis();
 
     rAlreadyUsed = true;
+      
+    showPopUp = false;
 
     rPressedDecoy = true;
 
@@ -126,9 +134,18 @@ function greenKeyPressed() {
     }
 }
 
+function greenMousePressed() {
+    if (showPopUp) {
+      if (mouseButton === LEFT)
+          showPopUp = false;
+        return;
+    }
+}
+
+
 function startingPlatform() {
 
-  image(platform, platformX, platformY, image.width, image.height);
+  image(platform, platformX, platformY, platform.width, platform.height);
 
   if (greenScrolling) {
     platformX -= 5;

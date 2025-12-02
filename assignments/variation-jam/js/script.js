@@ -2,9 +2,7 @@
  * Timeburner
  * Ben Woschitz
  * 
- * A relatively simple example of a set of variations within a single
- * project. (When we learn Object-Oriented Programming this will be a
- * LOT easier.)
+ * A game about dodging obstacles and slowing down time in a speeder across a vast cityscape.
  */
 
 "use strict";
@@ -31,10 +29,10 @@ let maxSpawnDelay = 2500;
 let spawningObstacles = false;
 
 // Weighted obstacle spawns, higher = more common
-let rarity = [5, 3, 2, 1, 1];
+let rarity = [9, 3, 2, 1, 1];
 
 // Speeds per obstacle type
-let speeds = [2, 3, 3, 1, 3];
+let speeds = [9, 3, 3, 3, 3];
 
 // Speeder Sprite Animations
 let speederTurnOn;
@@ -73,6 +71,10 @@ let menuScrolling = true;
 
 // Variation-specific flags
 let greenScrolling = false;
+
+// Instructions popup
+let instructionsPage;
+let showPopUp = true;
 
 // Starting Platform
 let platform;
@@ -122,6 +124,9 @@ function preload() {
   
     // Preloads timeburn icon
     burnIcon = loadImage("assets/sprites/TimechangeIcon.png");
+  
+    // Preloads instructions popup
+    instructionsPage = loadImage("assets/images/instructions.png");
   
     // Preloads different obstacles
     obstacleImages[0] = loadImage("assets/sprites/obstacles/square.png");
@@ -369,5 +374,10 @@ function drawThreeBurnIcons() {
   }
 
   noTint();
+}
+
+function drawPopUp() {
+  imageMode(CENTER);
+  image(instructionsPage, width / 2, height / 2);
 }
 
