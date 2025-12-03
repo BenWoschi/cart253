@@ -46,11 +46,13 @@ let speederTurnOn;
 let speederOn;
 let speederMovement;
 let speederMotion;
+let speederAlive = true;
 let speederDecoy;
 let timeburn;
 let timeburnUse;
 let explosionSpeeder;
 let explosion;
+let explosionTriggered = false;
 
 // Timeburn Icon and grayscale array for loop
 let burnIcon;
@@ -84,6 +86,12 @@ let greenScrolling = false;
 // Instructions popup
 let instructionsPage;
 let showPopUp = true;
+
+// Return arrow
+let returnArrow;
+
+// Score Window
+let scoreWindow;
 
 // Starting Platform
 let platform;
@@ -137,6 +145,12 @@ function preload() {
     // Preloads instructions popup
     instructionsPage = loadImage("assets/images/instructions.png");
   
+    // Preloads Arrow
+    returnArrow = loadImage("assets/images/arrow.png");
+
+    // Preloads Score Window
+    scoreWindow = loadImage("assets/images/scorescreen.png");
+  
     // Preloads different obstacles
     obstacleImages[0] = loadImage("assets/sprites/obstacles/square.png");
     obstacleImages[1] = loadImage("assets/sprites/obstacles/rect.png");
@@ -188,12 +202,15 @@ function mousePressed() {
             break;
         case "red-variation":
             redMousePressed();
+            returnMousePressed();
             break
         case "green-variation":
             greenMousePressed();
+            returnMousePressed();
             break;
         case "blue-variation":
             blueMousePressed();
+            returnMousePressed();
             break;
     }
 }
@@ -406,5 +423,51 @@ function drawScore() {
   textSize(28);
   textAlign(RIGHT, TOP);
   text("Score: " + passedCount, width - 20, 20);
+}
+
+function drawScoreWindow() {
+  push();
+  imageMode(CENTER);
+  image(scoreWindow, width / 2, height / 2);
+  pop();
+}
+
+function drawScoreWindowText() {
+  fill("#f3f3f3");
+  textSize(76);
+  textAlign(CENTER, CENTER);
+  text("Oh no! You crashed!", width / 2, height / 2 - 120);
+  textSize(48);
+  text("Your final score was: " + passedCount, width / 2, height / 2 - 60);
+}
+
+function resetMenu() {
+    easy.isPressed = false;
+    easy.hover = false;
+    medium.isPressed = false;
+    medium.hover = false;
+    hard.isPressed = false;
+    hard.hover = false;
+  
+    speederAlive = true;
+
+    // reset popup on entering a mode again
+    showPopUp = true;
+    showRText = false;
+
+    // reset any positioning affected during gameplay
+    platformX = 50;
+    rAlreadyUsed = false;
+    rPressedDecoy = false;
+
+    // reset timeburn UI
+    grayScale = [false, false, false];
+    nextToGray = 0;
+
+    // reset objects
+    objects = [];
+    passedCount = 0;
+
+    menuScrolling = true;
 }
 

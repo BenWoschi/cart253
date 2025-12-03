@@ -8,8 +8,48 @@
  * This will be called just before the green variation starts
  */
 function greenSetup() {
+    // Reset scrolling + gameplay
     greenScrolling = false;
+    spawningObstacles = false;
+    passedCount = 0;
+
+    // Reset popup behavior
+    showPopUp = true;
+    showRText = false;
+
+    // Reset R logic
+    rAlreadyUsed = false;
+    rPressedDecoy = false;
+
+    // Reset animations
+    playingStartAnimation = false;
+    animationFinished = false;
+
+    // Reset speeds (important!)
+    bgSpeed = [1, 2, 3, 4, 5];
+    speeds = [9, 3, 3, 3, 3];
+
+    // Reset slowdown / timeburn
+    timeSlowed = false;
+    nextToGray = 0;
+    grayScale = [false, false, false];
+    timeburnUsesLeft = 3;
+    isTimeburnPlaying = false;
+    isTimeburnOnCooldown = false;
+
+    // Reset platform
+    platformX = 50;
+    platformY = 300;
+
+    // Reset obstacles array
+    objects = [];
+
+    // Reset speeder position
+    speederMotion.x = 120;
+    speederMotion.y = 299;
 }
+
+
 
 /**
  * This will be called every frame when the green variation is active
@@ -35,7 +75,7 @@ function greenDraw() {
   }
 
   // When animation finishes, start scrolling the other elements
-  if (animationFinished) {
+  if (animationFinished && speederAlive) {
     greenScrolling = true;
     speederMotion.controllable = true;
     speederMotion.draw();
@@ -62,7 +102,7 @@ function greenDraw() {
       obj.update();
       obj.draw();
 
-      if (!obj.passed && speederMotion.x > obj.x) {
+      if (speederAlive && !obj.passed && speederMotion.x > obj.x) {
         passedCount++;
         obj.passed = true;
     }
@@ -81,19 +121,39 @@ function greenDraw() {
       let hitY = speederCenterY - h2 / 2 < obj.y + h1 / 2 &&
         speederCenterY + h2 / 2 > obj.y - h1 / 2;
 
-      if (hitX && hitY) {
-        explosion.drawEX();
-        console.log("HIT!");
+      if (hitX && hitY && speederAlive) {
+      // Stops speeder motion and drawing  
+      speederAlive = false;
+      explosionTriggered = true;
+      // Resets explosion animation  
+      explosion.frame = 0;
+    }
+
+    // Draws explosion if triggered
+    if (explosionTriggered) {
+      explosion.drawEX();
+
+    // Stops drawing explosion when animation ends
+      if (explosion.frame >= explosion.frames) {
+          explosionTriggered = false;
+      }
+    }
+      
+      if (speederAlive) {
+      drawScoreWindow();
+      drawScoreWindowText();
       }
 
-      // Remove offscreen
-      if (obj.offscreen()) {
+    // Remove object offscreen
+    if (obj.offscreen()) {
         objects.splice(i, 1);
       }
     }
   }
+
   drawThreeBurnIcons();
   drawScore();
+  drawReturnArrow();
 
   if (showPopUp) {
     push();
@@ -192,4 +252,19 @@ function startingPlatform() {
   if (greenScrolling) {
     platformX -= 5;
   }
+}
+
+function drawReturnArrow() {
+  image(returnArrow, 16, 16);
+}
+
+function returnMousePressed() {
+    // Checks if mouseX and Y is within the image radius
+    if (
+        mouseX > 17 && mouseX < 17 + 60 && mouseY > 17 && mouseY < 17 + 60
+    ) {
+        // Returns to menu
+        resetMenu();
+        state = "menu";
+    }
 }
