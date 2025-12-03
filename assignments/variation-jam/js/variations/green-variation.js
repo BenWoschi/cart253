@@ -139,7 +139,7 @@ function greenDraw() {
       }
     }
       
-      if (speederAlive) {
+      if (!speederAlive) {
       drawScoreWindow();
       drawScoreWindowText();
       }
@@ -235,7 +235,6 @@ function greenKeyPressed() {
 
 }
 
-
 function greenMousePressed() {
     if (showPopUp) {
       if (mouseButton === LEFT)
@@ -267,4 +266,35 @@ function returnMousePressed() {
         resetMenu();
         state = "menu";
     }
+}
+
+function scoreTextMousePressed() {
+  // Retry click
+  let retryW = textWidth(retryText.text);
+  let retryH = 48;
+  if (
+    mouseX > retryText.x - retryW / 2 &&
+    mouseX < retryText.x + retryW / 2 &&
+    mouseY > retryText.y - retryH / 2 &&
+    mouseY < retryText.y + retryH / 2
+  ) {
+    // Resets the game state completely and stays on the same variation page
+    resetMenu();
+    state = easy.state;
+    easy.setup();
+  }
+
+  // Menu click
+  let menuW = textWidth(menuText.text);
+  let menuH = 48;
+  if (
+    mouseX > menuText.x - menuW / 2 &&
+    mouseX < menuText.x + menuW / 2 &&
+    mouseY > menuText.y - menuH / 2 &&
+    mouseY < menuText.y + menuH / 2
+  ) {
+    // Resets the game abd returns to the menu
+    resetMenu();
+    state = "menu";
+  }
 }

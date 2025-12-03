@@ -9,6 +9,8 @@
 
 let state = "menu";
 let bgMenu;
+let retryText;
+let menuText;
 
 // Level select text
 let selectText;
@@ -203,14 +205,17 @@ function mousePressed() {
         case "red-variation":
             redMousePressed();
             returnMousePressed();
+            scoreTextMousePressed();
             break
         case "green-variation":
             greenMousePressed();
             returnMousePressed();
+            scoreTextMousePressed();
             break;
         case "blue-variation":
             blueMousePressed();
             returnMousePressed();
+            scoreTextMousePressed();
             break;
     }
 }
@@ -436,9 +441,24 @@ function drawScoreWindowText() {
   fill("#f3f3f3");
   textSize(76);
   textAlign(CENTER, CENTER);
-  text("Oh no! You crashed!", width / 2, height / 2 - 120);
+  text("Oh no! You crashed!", width / 2, height / 2 - 80);
   textSize(48);
-  text("Your final score was: " + passedCount, width / 2, height / 2 - 60);
+  text("Your final score was: " + passedCount, width / 2, height / 2 - 20);
+
+  retryText = {
+    x: width / 2 + 100,
+    y: height / 2 + 80,
+    text: "Retry"
+  };
+
+  menuText = {
+    x: width / 2 - 100,
+    y: height / 2 + 80,
+    text: "Main Menu"
+  };
+  fill("#FFCEEF");
+  text(retryText.text, retryText.x, retryText.y);
+  text(menuText.text, menuText.x, menuText.y);
 }
 
 function resetMenu() {
@@ -451,20 +471,20 @@ function resetMenu() {
   
     speederAlive = true;
 
-    // reset popup on entering a mode again
+    // Resets popup
     showPopUp = true;
     showRText = false;
 
-    // reset any positioning affected during gameplay
+    // Resets any positioning affected during gameplay
     platformX = 50;
     rAlreadyUsed = false;
     rPressedDecoy = false;
 
-    // reset timeburn UI
+    // Resets timeburn UI
     grayScale = [false, false, false];
     nextToGray = 0;
 
-    // reset objects
+    // Resets scrolling objects
     objects = [];
     passedCount = 0;
 
