@@ -43,6 +43,14 @@ let rarity = [9, 3, 2, 1, 1];
 // Speeds per obstacle type
 let speeds = [9, 3, 3, 3, 3];
 
+// Blue variation speeds
+let blueSpeeds = [4, 2, 5, 3, 6];
+let blueBgSpeed = [4, 5, 6, 7, 8];
+
+// Red variation speeds
+let redSpeeds = [6, 4, 7, 5, 8];
+let redBgSpeed = [7, 8, 9, 10, 11];
+
 // Speeder Sprite Animations
 let speederTurnOn;
 let speederOn;
@@ -76,13 +84,13 @@ let animationFinished = false;
 // Prevents "r" from being pressed again
 let rAlreadyUsed = false;
 
-// Decoy is displayed until r is pressed
+// Decoy is displayed until "r" is pressed
 let rPressedDecoy = false;
 
 // Global flag for menu background scrolling
 let menuScrolling = true;
 
-// Variation-specific flags
+// Prevents moving platform until true
 let greenScrolling = false;
 
 // Instructions popup
@@ -200,7 +208,6 @@ function draw() {
 function mousePressed() {
     switch (state) {
         case "menu":
-            menuMousePressed();
             break;
         case "red-variation":
             redMousePressed();
@@ -490,4 +497,142 @@ function resetMenu() {
 
     menuScrolling = true;
 }
+
+function resetGreenVariation() {
+    // Reset speeds specific to green
+    speeds = [9, 3, 3, 3, 3];    // green variation speeds
+    bgSpeed = [1, 2, 3, 4, 5];   // green variation background speeds
+
+    // Reset scrolling & gameplay
+    greenScrolling = false;
+    spawningObstacles = false;
+    passedCount = 0;
+
+    // Reset popup behavior
+    showPopUp = true;
+    showRText = false;
+
+    // Reset R logic
+    rAlreadyUsed = false;
+    rPressedDecoy = false;
+
+    // Reset animations
+    playingStartAnimation = false;
+    animationFinished = false;
+
+    // Reset timeburn UI
+    grayScale = [false, false, false];
+    nextToGray = 0;
+    timeburnUsesLeft = 3;
+    isTimeburnPlaying = false;
+    isTimeburnOnCooldown = false;
+    timeSlowed = false;
+
+    // Reset platform
+    platformX = 50;
+    platformY = 300;
+
+    // Reset obstacles array
+    objects = [];
+
+    // Reset speeder position
+    speederMotion.x = 120;
+    speederMotion.y = 299;
+
+    // Make sure speeder is alive
+    speederAlive = true;
+    explosionTriggered = false;
+}
+
+function resetBlueVariation() {
+    speeds = blueSpeeds;
+    bgSpeed = blueBgSpeed;
+
+    greenScrolling = false;
+    spawningObstacles = false;
+    passedCount = 0;
+  
+    // Blue-specific object delay
+    minSpawnDelay = 1000;
+    maxSpawnDelay = 2000;
+
+    showPopUp = true;
+    showRText = false;
+
+    rAlreadyUsed = false;
+    rPressedDecoy = false;
+
+    playingStartAnimation = false;
+    animationFinished = false;
+
+    grayScale = [false, false, false];
+    nextToGray = 0;
+    timeburnUsesLeft = 3;
+    isTimeburnPlaying = false;
+    isTimeburnOnCooldown = false;
+    timeSlowed = false;
+
+    platformX = 50;
+    platformY = 300;
+
+    objects = [];
+
+    speederMotion.x = 120;
+    speederMotion.y = 299;
+
+    speederAlive = true;
+    explosionTriggered = false;
+}
+
+function resetRedVariation() {
+    // Set red variation speeds
+    speeds = redSpeeds;
+    bgSpeed = redBgSpeed;
+
+    // Reset scrolling & gameplay
+    greenScrolling = false;
+    spawningObstacles = false;
+    passedCount = 0;
+  
+    // Red-specific object delay
+    minSpawnDelay = 750;
+    maxSpawnDelay = 1750;
+
+    // Reset popup behavior
+    showPopUp = true;
+    showRText = false;
+
+    // Reset R logic
+    rAlreadyUsed = false;
+    rPressedDecoy = false;
+
+    // Reset animations
+    playingStartAnimation = false;
+    animationFinished = false;
+
+    // Reset timeburn UI
+    grayScale = [false, false, false];
+    nextToGray = 0;
+    timeburnUsesLeft = 3;
+    isTimeburnPlaying = false;
+    isTimeburnOnCooldown = false;
+    timeSlowed = false;
+
+    // Reset platform
+    platformX = 50;
+    platformY = 300;
+
+    // Reset obstacles array
+    objects = [];
+
+    // Reset speeder position
+    speederMotion.x = 120;
+    speederMotion.y = 299;
+
+    // Make sure speeder is alive
+    speederAlive = true;
+    explosionTriggered = false;
+}
+
+
 

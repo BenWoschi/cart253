@@ -55,6 +55,7 @@ function greenSetup() {
  * This will be called every frame when the green variation is active
  */
 function greenDraw() {
+  
   drawScrollingBackgrounds(greenScrolling);
   startingPlatform();
 
@@ -269,22 +270,33 @@ function returnMousePressed() {
 }
 
 function scoreTextMousePressed() {
-  // Retry click
   let retryW = textWidth(retryText.text);
   let retryH = 48;
+
   if (
     mouseX > retryText.x - retryW / 2 &&
     mouseX < retryText.x + retryW / 2 &&
     mouseY > retryText.y - retryH / 2 &&
     mouseY < retryText.y + retryH / 2
   ) {
-    // Resets the game state completely and stays on the same variation page
-    resetMenu();
-    state = easy.state;
-    easy.setup();
+
+    // Calls the correct variation reset
+    if (state === "green-variation") {
+      resetGreenVariation();
+      state = "green-variation";
+      greenSetup();
+    } else if (state === "blue-variation") {
+      resetBlueVariation();
+      state = "blue-variation";
+      blueSetup();
+    } else if (state === "red-variation") {
+      resetRedVariation();
+      state = "red-variation";
+      redSetup();
+    }
   }
 
-  // Menu click
+  // Menu click stays the same
   let menuW = textWidth(menuText.text);
   let menuH = 48;
   if (
@@ -293,8 +305,9 @@ function scoreTextMousePressed() {
     mouseY > menuText.y - menuH / 2 &&
     mouseY < menuText.y + menuH / 2
   ) {
-    // Resets the game abd returns to the menu
+    // Resets the game and returns to the menu
     resetMenu();
     state = "menu";
   }
 }
+
