@@ -17,13 +17,12 @@ function greenSetup() {
 function greenDraw() {
   drawScrollingBackgrounds(greenScrolling);
   startingPlatform();
-  drawThreeBurnIcons();
 
   if (!rPressedDecoy) {
     drawSpeederDecoy();
   }
 
-// Plays the speeder turn on animation
+  // Plays the speeder turn on animation
   if (playingStartAnimation) {
     speederOn.drawOnceStart();
 
@@ -63,11 +62,16 @@ function greenDraw() {
       obj.update();
       obj.draw();
 
+      if (!obj.passed && speederMotion.x > obj.x) {
+        passedCount++;
+        obj.passed = true;
+    }
+
       // Speeder rectangle collision
       let w1 = obj.img.width;
       let h1 = obj.img.height;
       let w2 = speederMotion.frameWidth * 0.85;
-      let h2 = speederMotion.h * 0.5; // your height factor
+      let h2 = speederMotion.h * 0.5;
 
       let speederCenterX = (speederMotion.x + 50) + speederMotion.frameWidth / 2;
       let speederCenterY = speederMotion.y + speederMotion.h / 2;
@@ -89,10 +93,17 @@ function greenDraw() {
     }
   }
   drawThreeBurnIcons();
+  drawScore();
 
-   if (showPopUp) {
+  if (showPopUp) {
     push();
     drawPopUp();
+    pop();
+  }
+
+  if (showRText) {
+    push();
+    drawRText();
     pop();
   }
 
@@ -104,44 +115,75 @@ function greenDraw() {
 function greenKeyPressed() {
   // Blocks future r presses
   if(!rAlreadyUsed){
-
     if (key === 'R' || key === 'r') {
-    
-    spawningObstacles = true;
-    lastSpawnTime = millis();
+      spawningObstacles = true;
+      lastSpawnTime = millis();
 
-    rAlreadyUsed = true;
-      
-    showPopUp = false;
+      rAlreadyUsed = true;
+      showPopUp = false;
+      showRText = false;
+      rPressedDecoy = true;
 
-    rPressedDecoy = true;
-
-    // reset animation frame
-    speederOn.frame = 0;
-
-    playingStartAnimation = true;
-    animationFinished = false;
+      // reset animation frame
+      speederOn.frame = 0;
+      playingStartAnimation = true;
+      animationFinished = false;
     }
   }
 
-    if (keyCode === SHIFT && rAlreadyUsed) {
-      if (nextToGray < 3 && !isTimeburnOnCooldown) {
-        // Sets icon to gray
-        grayScale[nextToGray] = true;
-        nextToGray++;
-      }
-      triggerTimeburn();
+  // Timeburn slowdown on SHIFT
+  // Check for Shift and that timeburn isn't already active
+  // Turns timeburn icon gray after SHIFT press
+  if (keyIsDown(SHIFT) && rAlreadyUsed && !timeSlowed && nextToGray < 3 && !isTimeburnOnCooldown) {
+    grayScale[nextToGray] = true;
+    nextToGray++;
+
+    triggerTimeburn();
+
+    timeSlowed = true;
+
+    // Applies slowdown to background speeds
+    for (let i = 0; i < bgSpeed.length; i++) {
+        bgSpeed[i] *= 0.5;
     }
+
+    // Applies slowdown to existing objects
+    for (let i = 0; i < objects.length; i++) {
+        objects[i].speed *= 0.5;
+    }
+
+    // Slows down speed arrays so newly spawned objects are slowed
+    for (let i = 0; i < speeds.length; i++) {
+        speeds[i] *= 0.5;
+    }
+
+    // Restores speeds after 5 seconds
+    setTimeout(() => {
+        bgSpeed = [1, 2, 3, 4, 5];
+
+        // Restores speeds array
+        speeds = [9, 3, 3, 3, 3];
+
+        // Restores existing object speeds
+        for (let i = 0; i < objects.length; i++) {
+            objects[i].speed = speeds[objects[i].index];
+        }
+
+        timeSlowed = false;
+    }, 5000);
+  }
+
 }
+
 
 function greenMousePressed() {
     if (showPopUp) {
       if (mouseButton === LEFT)
-          showPopUp = false;
+        showPopUp = false;
+        showRText = true;
         return;
     }
 }
-
 
 function startingPlatform() {
 

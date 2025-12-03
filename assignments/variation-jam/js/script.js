@@ -9,7 +9,13 @@
 
 let state = "menu";
 let bgMenu;
+
+// Level select text
 let selectText;
+
+// Press R to start text
+let rText;
+let showRText = false;
 
 // Scrolling Background and sets up arrays
 let bgLayers = [];
@@ -20,6 +26,7 @@ let bgSpeed = [];
 let obstacleImages = [];
 let objects = [];
 let lastSpawnTime = 0;
+let passedCount = 0;
 
 // Sets up the spawn delay for obstacles
 let minSpawnDelay = 1500;
@@ -55,6 +62,8 @@ let timeburnUsesLeft = 3;
 let isTimeburnPlaying = false;
 let isTimeburnOnCooldown = false;
 let timeburnCooldown = 5000;
+// Prevents multiple triggers
+let timeSlowed = false;
 
 // Checks for animation state with speeder turnOn
 let playingStartAnimation = false;
@@ -338,6 +347,7 @@ class ScrollObject {
     this.x = width + 80;
     this.y = random(60, height - 60);
     this.speed = speeds[this.index];
+    this.passed = false;
   }
   update() {
     // Left movement on canvas
@@ -379,5 +389,22 @@ function drawThreeBurnIcons() {
 function drawPopUp() {
   imageMode(CENTER);
   image(instructionsPage, width / 2, height / 2);
+}
+
+function drawRText() {
+  if (frameCount % 60 < 30) {
+    fill("#f3f3f3");
+    textSize(48);
+    textFont(selectText);
+    textAlign(CENTER);
+    text("Press R to begin", width / 2, height / 2);
+  }
+}
+
+function drawScore() {
+  fill("#f3f3f3");
+  textSize(28);
+  textAlign(RIGHT, TOP);
+  text("Score: " + passedCount, width - 20, 20);
 }
 
