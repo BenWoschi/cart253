@@ -58,6 +58,7 @@ function redSetup() {
  * This will be called every frame when the red variation is active
  */
 function redDraw() {
+  //drawLevelMusic();
   drawScrollingBackgrounds(greenScrolling);
   startingPlatform();
 
@@ -141,7 +142,7 @@ function redDraw() {
           explosionTriggered = false;
       }
     }
-      
+      // If speeder explodes, draw score/gameover screen
       if (!speederAlive) {
       drawScoreWindow();
       drawScoreWindowText();
@@ -153,17 +154,19 @@ function redDraw() {
       }
     }
   }
-
+  // Draws return arrow, timeburn UI and score
   drawThreeBurnIcons();
   drawScore();
   drawReturnArrow();
 
+  // Draws instructional popup if triggered
   if (showPopUp) {
     push();
     drawPopUp();
     pop();
   }
 
+  // Draws blinking start text if triggered
   if (showRText) {
     push();
     drawRText();
@@ -187,7 +190,7 @@ function redKeyPressed() {
       showRText = false;
       rPressedDecoy = true;
 
-      // reset animation frame
+      // Resets animation frames
       speederOn.frame = 0;
       playingStartAnimation = true;
       animationFinished = false;
@@ -238,6 +241,9 @@ function redKeyPressed() {
 
 }
 
+/**
+ * Closes popup and shows start text on mouse click
+*/
 function redMousePressed() {
     if (showPopUp) {
       if (mouseButton === LEFT)
@@ -247,6 +253,9 @@ function redMousePressed() {
     }
 }
 
+/**
+ * Draws and moves starting platform when triggered
+*/
 function startingPlatform() {
 
   image(platform, platformX, platformY, platform.width, platform.height);
@@ -256,10 +265,16 @@ function startingPlatform() {
   }
 }
 
+/**
+ * Draws return arrow in top left
+*/
 function drawReturnArrow() {
   image(returnArrow, 16, 16);
 }
 
+/**
+ * Enables return arrow functionality
+*/
 function returnMousePressed() {
     // Checks if mouseX and Y is within the image radius
     if (
@@ -271,10 +286,14 @@ function returnMousePressed() {
     }
 }
 
+/**
+ * Enables retry and back to menu functionality in gameover screen
+*/
 function scoreTextMousePressed() {
+  // Retry click
   let retryW = textWidth(retryText.text);
   let retryH = 48;
-
+  // Checks for mouse distance to retry text
   if (
     mouseX > retryText.x - retryW / 2 &&
     mouseX < retryText.x + retryW / 2 &&
@@ -301,6 +320,7 @@ function scoreTextMousePressed() {
   // Menu click
   let menuW = textWidth(menuText.text);
   let menuH = 48;
+  // Checks for mouse distance to retry text
   if (
     mouseX > menuText.x - menuW / 2 &&
     mouseX < menuText.x + menuW / 2 &&

@@ -108,6 +108,8 @@ function menuDraw() {
   drawButton(hard);
 
   blinkingText();
+
+  //drawMenuMusic();
 }
 
 // Allows text to repeatedly blink

@@ -2,13 +2,21 @@
  * Timeburner
  * Ben Woschitz
  * 
- * A game about dodging obstacles and slowing down time in a speeder across a vast cityscape.
+ * A game about dodging obstacles and slowing down time in a speeder across a vast cyberpunk cityscape.
  */
 
 "use strict";
 
+// Menu state
 let state = "menu";
+
+// Background menu
 let bgMenu;
+
+// Music for both menu and level
+let synthMusic;
+
+// Retry and back to menu text on gameover
 let retryText;
 let menuText;
 
@@ -108,6 +116,9 @@ let platform;
 let platformX = 50;
 let platformY = 300;
 
+/**
+ * Preloads all images, sounds and sprites
+*/
 function preload() {
     // Preloads Menu UI Image
     bgMenu = loadImage("assets/sprites/Menu/TimeBurnerMenuTitleDark.png");
@@ -167,10 +178,13 @@ function preload() {
     obstacleImages[2] = loadImage("assets/sprites/obstacles/long-rect.png");
     obstacleImages[3] = loadImage("assets/sprites/obstacles/bigrect.png");
     obstacleImages[4] = loadImage("assets/sprites/obstacles/longer-rect.png");
+  
+    // Preloads music
+    synthMusic = loadSound("assets/sounds/spaceracer.mp3");
 }
 
 /**
- * Create the canvas
+ * Create the canvas and draws the sprite animations
 */
 function setup() {
   createCanvas(1080, 720);
@@ -245,7 +259,9 @@ function keyPressed() {
   }
 }
 
-// Scrolling layered background
+/**
+ * Draws the scrolling layered background twice to give a seamless loop
+*/
 function drawScrollingBackgrounds(scrollActive) {
   for (let i = 0; i < bgLayers.length; i++) {
 
@@ -262,6 +278,9 @@ function drawScrollingBackgrounds(scrollActive) {
   }
 }
 
+/**
+ * Creates a sprite class sheet used for all sprite animations
+*/
 function Sprite(sheet, x, y, numberFrames, sheetWidth) {
   this.sheet = sheet;
   this.x = x;
@@ -287,6 +306,7 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
       if (keyIsDown(68)) this.x += this.speed; // D
     }
     
+  // Sprite width and height variables
   let spriteW = this.frameWidth * this.scale;
   let spriteH = this.h * this.scale;
 
@@ -303,18 +323,24 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
           this.frame = 0;
       }
   }
+
+  // Used for looping sprite animations
   this.drawOnceStart = function () {
     image(this.sheet, this.x, this.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       if (this.frame < this.frames) {
           this.frame += 0.25;
       }
   }
+
+  // Used for effects that differ from the speeder and loop once
   this.drawFX = function () {
     image(this.sheet, speederMotion.x + 10, speederMotion.y - 30, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       if (this.frame <= this.frames) {
           this.frame += 0.15;
       }
   }
+
+  // Separate sprite class for the explosion
   this.drawEX = function () {
     image(this.sheet, speederMotion.x + 20, speederMotion.y, this.frameWidth * this.scale, this.h * this.scale, this.frameWidth * floor(this.frame), 0, this.frameWidth, this.h);
       if (this.frame <= this.frames) {
@@ -323,6 +349,9 @@ function Sprite(sheet, x, y, numberFrames, sheetWidth) {
   }
 }
 
+/**
+ * Draws the initial stationary decoy of the speeder
+*/
 function drawSpeederDecoy() {
   // Does not draw if "r" was pressed
   if (rPressedDecoy) return;
@@ -334,6 +363,9 @@ function drawSpeederDecoy() {
     speederDecoy, 120, 312, speederDecoy.width * decoyWidth, speederDecoy.height * decoyHeight);
 }
 
+/**
+ * Triggers the timeburn effect once conditions are met and puts it on a 5 second cooldown
+*/
 function triggerTimeburn() {
     // Don't allow triggering unless everything is valid
     if (timeburnUsesLeft > 0 && !isTimeburnPlaying && !isTimeburnOnCooldown) {
@@ -353,6 +385,7 @@ function triggerTimeburn() {
 }
 
 // Weighted spawns for objects
+// AI helped with this in particular
 function pickWeightedIndex(weights) {
   let total = 0;
   for (let w of weights) total += w;
@@ -366,7 +399,9 @@ function pickWeightedIndex(weights) {
   }
 }
 
-// Handles the scrolling object spawns, random rotations, spawnrate, and speed
+/**
+ * Object class that handles the scrolling object spawns, random rotations, spawnrate, and speed
+*/
 class ScrollObject {
   constructor() {
     // Chooses obstacle type
@@ -376,6 +411,7 @@ class ScrollObject {
     this.x = width + 80;
     this.y = random(60, height - 60);
     this.speed = speeds[this.index];
+    // Boolean used for scoring system once speeder passes each object
     this.passed = false;
   }
   update() {
@@ -383,6 +419,7 @@ class ScrollObject {
     this.x -= this.speed;
   }
 
+  // Draws the different images of the objects themselves
   draw() {
     push();
     translate(this.x, this.y);
@@ -397,11 +434,15 @@ class ScrollObject {
 
 }
 
+/**
+ * Draws the 3 timeburn icons that indicate how many uses are left
+*/
 function drawThreeBurnIcons() {
   let startX = 920;
   let y = 660;
   let spacing = 45;
   
+  // Turns them grayscale if they are not
   for (let i = 0; i < 3; i++) {
     if (grayScale[i]) {
       tint(0, 0, 0);
@@ -415,11 +456,17 @@ function drawThreeBurnIcons() {
   noTint();
 }
 
+/**
+ * Draws the instructions popup on initial level start
+*/
 function drawPopUp() {
   imageMode(CENTER);
   image(instructionsPage, width / 2, height / 2);
 }
 
+/**
+ * Draws blinking text to indicate to the player on how to start
+*/
 function drawRText() {
   if (frameCount % 60 < 30) {
     fill("#f3f3f3");
@@ -430,6 +477,9 @@ function drawRText() {
   }
 }
 
+/**
+ * Draws a simple score counter in the top right of the page
+*/
 function drawScore() {
   fill("#f3f3f3");
   textSize(28);
@@ -437,6 +487,9 @@ function drawScore() {
   text("Score: " + passedCount, width - 20, 20);
 }
 
+/**
+ * Draws the gameover/score window image
+*/
 function drawScoreWindow() {
   push();
   imageMode(CENTER);
@@ -444,6 +497,9 @@ function drawScoreWindow() {
   pop();
 }
 
+/**
+ * Draws the gameover/score window text
+*/
 function drawScoreWindowText() {
   fill("#f3f3f3");
   textSize(76);
@@ -468,6 +524,9 @@ function drawScoreWindowText() {
   text(menuText.text, menuText.x, menuText.y);
 }
 
+/**
+ * Partial reset of gamestate when returning to menu
+*/
 function resetMenu() {
     easy.isPressed = false;
     easy.hover = false;
@@ -495,15 +554,24 @@ function resetMenu() {
     objects = [];
     passedCount = 0;
 
+    // Menu BG scrolling
     menuScrolling = true;
+  
+    // Start menu music loop
+    synthMusic.stop();
+    synthMusic.loop(0, 1, 1, 0, 49);
+
 }
 
+/**
+ * Resets green/easy variation game state
+*/
 function resetGreenVariation() {
     // Reset speeds specific to green
     speeds = [9, 3, 3, 3, 3];    // green variation speeds
     bgSpeed = [1, 2, 3, 4, 5];   // green variation background speeds
 
-    // Reset scrolling & gameplay
+    // Reset scrolling objects & score count
     greenScrolling = false;
     spawningObstacles = false;
     passedCount = 0;
@@ -520,7 +588,7 @@ function resetGreenVariation() {
     playingStartAnimation = false;
     animationFinished = false;
 
-    // Reset timeburn UI
+    // Reset timeburn usage and UI
     grayScale = [false, false, false];
     nextToGray = 0;
     timeburnUsesLeft = 3;
@@ -528,7 +596,7 @@ function resetGreenVariation() {
     isTimeburnOnCooldown = false;
     timeSlowed = false;
 
-    // Reset platform
+    // Reset platform position
     platformX = 50;
     platformY = 300;
 
@@ -542,12 +610,22 @@ function resetGreenVariation() {
     // Make sure speeder is alive
     speederAlive = true;
     explosionTriggered = false;
+  
+    // Level music loop (from 50s)
+    synthMusic.stop();
+    synthMusic.loop(50, 1, 1, 1, 129);
+
 }
 
+/**
+ * Resets medium/blue variation game state
+*/
 function resetBlueVariation() {
+    // Set blue variation speeds
     speeds = blueSpeeds;
     bgSpeed = blueBgSpeed;
 
+    // Reset scrolling objects & score count
     greenScrolling = false;
     spawningObstacles = false;
     passedCount = 0;
@@ -556,15 +634,19 @@ function resetBlueVariation() {
     minSpawnDelay = 1000;
     maxSpawnDelay = 2000;
 
+    // Reset popup behavior
     showPopUp = true;
     showRText = false;
 
+    // Reset R logic
     rAlreadyUsed = false;
     rPressedDecoy = false;
 
+    // Reset animations
     playingStartAnimation = false;
     animationFinished = false;
 
+    // Reset timeburn usage UI
     grayScale = [false, false, false];
     nextToGray = 0;
     timeburnUsesLeft = 3;
@@ -572,24 +654,35 @@ function resetBlueVariation() {
     isTimeburnOnCooldown = false;
     timeSlowed = false;
 
+    // Reset platform position
     platformX = 50;
     platformY = 300;
 
+    // Reset obstacles array
     objects = [];
 
+    // Reset speeder position
     speederMotion.x = 120;
     speederMotion.y = 299;
 
+    // Make sure speeder is alive
     speederAlive = true;
     explosionTriggered = false;
+
+    // Level music loop (from 50s)
+    synthMusic.stop();
+    synthMusic.loop(50, 1, 1, 1, 129);
 }
 
+/**
+ * Resets red/hard variation game state
+*/
 function resetRedVariation() {
     // Set red variation speeds
     speeds = redSpeeds;
     bgSpeed = redBgSpeed;
 
-    // Reset scrolling & gameplay
+    // Reset scrolling objects & score count
     greenScrolling = false;
     spawningObstacles = false;
     passedCount = 0;
@@ -610,7 +703,7 @@ function resetRedVariation() {
     playingStartAnimation = false;
     animationFinished = false;
 
-    // Reset timeburn UI
+    // Reset timeburn usage and UI
     grayScale = [false, false, false];
     nextToGray = 0;
     timeburnUsesLeft = 3;
@@ -618,7 +711,7 @@ function resetRedVariation() {
     isTimeburnOnCooldown = false;
     timeSlowed = false;
 
-    // Reset platform
+    // Reset platform position
     platformX = 50;
     platformY = 300;
 
@@ -632,6 +725,26 @@ function resetRedVariation() {
     // Make sure speeder is alive
     speederAlive = true;
     explosionTriggered = false;
+  
+    // Level music loop (from 50s)
+    synthMusic.stop();
+    synthMusic.loop(50, 1, 1, 1, 129);
+}
+
+/**
+ * Draws menu music
+*/
+function drawMenuMusic() {
+    synthMusic.stop();
+    synthMusic.loop(0, 1, 1, 0, 49);
+}
+
+/**
+ * Draws menu music
+*/
+function drawLevelMusic() {
+    synthMusic.stop();
+    synthMusic.loop(50, 1, 1, 1, 129);
 }
 
 
