@@ -163,7 +163,7 @@ function preload() {
     platform = loadImage("assets/sprites/platform/SpeederPlatform.gif");
   
     // Preloads FX
-    timeburn = loadImage("assets/sprites/FX/speederTimechangeFix.png");
+    timeburn = loadImage("assets/sprites/FX/SpeederTimechangeFix.png");
     explosionSpeeder = loadImage("assets/sprites/FX/explosion.png");
 
     // Preloads Speeder Animations
