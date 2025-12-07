@@ -41,13 +41,17 @@ let hard = {
   hover: false
 };
 
-// Checks if mouse is inside the button rectangle
+/**
+ * Checks if mouse is inside button area
+*/
 function near(button) {
   return mouseX > button.x && mouseX < button.x + button.w &&
          mouseY > button.y && mouseY < button.y + button.h;
 }
 
-// Draws button in either normal, hover or pressed state
+/**
+ * Draws button in either hover, normal, or pressed state
+*/
 function drawButton(button) {
   let imgShow = button.img;
 
@@ -60,7 +64,9 @@ function drawButton(button) {
   image(imgShow, button.x, button.y, button.w, button.h);
 }
 
-// Updates button states
+/**
+ * Updates button states
+*/
 function updateButtons() {
 
   // Update hover state
@@ -79,14 +85,23 @@ function updateButtons() {
     if (easy.isPressed && easy.hover) {
       state = easy.state;
       easy.setup();
+      menuSelect.play();
+      menuMusic.stop();
+      drawLevelMusic();
     }
     if (medium.isPressed && medium.hover) {
       state = medium.state;
       medium.setup();
+      menuSelect.play();
+      menuMusic.stop();
+      drawLevelMusic();
     }
     if (hard.isPressed && hard.hover) {
       state = hard.state;
       hard.setup();
+      menuSelect.play();
+      menuMusic.stop();
+      drawLevelMusic();
     }
 
     // Resets pressed states
@@ -96,9 +111,30 @@ function updateButtons() {
   }
 }
 
-// Draws Menu
+/**
+ * Draws menu and splash screen
+*/
 function menuDraw() {
+
+  // Scrolling Background is always drawn
   drawScrollingBackgrounds(menuScrolling);
+
+  // Displays splash screen
+  if (!hasClickedToStart) {
+    fill("#100c1ea6");
+    rect(0, 0, 1080, 720);
+    fill("#f3f3f3");
+    textSize(48);
+    textFont(selectText);
+    textAlign(CENTER, CENTER);
+    text("Click to Start", width/2, height/2 + 50);
+    return;
+  }
+
+  // Starts menu music after click
+  if (!menuMusicStarted) {
+    startMenuMusic();
+  }
   image(bgMenu, 0, 0, width, height);
 
   updateButtons();
@@ -108,16 +144,17 @@ function menuDraw() {
   drawButton(hard);
 
   blinkingText();
-
-  //drawMenuMusic();
 }
 
-// Allows text to repeatedly blink
+/**
+ * Draws select difficulty blinking text
+*/
 function blinkingText() {
   if (frameCount % 60 < 30) {
     fill("#8E2C81");
     textSize(24);
     textFont(selectText);
+    textAlign(LEFT, BOTTOM);
     text("Select Difficulty", width / 2 - 67, height / 2 + 70);
   }
 }

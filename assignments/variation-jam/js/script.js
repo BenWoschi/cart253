@@ -9,12 +9,20 @@
 
 // Menu state
 let state = "menu";
+let hasClickedToStart = false;
+let menuMusicStarted = false;
 
 // Background menu
 let bgMenu;
 
-// Music for both menu and level
-let synthMusic;
+// Music and sounds
+let menuMusic;
+let levelMusic;
+let menuSelect;
+let overSelect;
+let explosionSound;
+let engineIgnition;
+let timeDistort;
 
 // Retry and back to menu text on gameover
 let retryText;
@@ -116,6 +124,9 @@ let platform;
 let platformX = 50;
 let platformY = 300;
 
+// Variable for lowpass filter
+let levelFilter;
+
 /**
  * Preloads all images, sounds and sprites
 */
@@ -179,8 +190,14 @@ function preload() {
     obstacleImages[3] = loadImage("assets/sprites/obstacles/bigrect.png");
     obstacleImages[4] = loadImage("assets/sprites/obstacles/longer-rect.png");
   
-    // Preloads music
-    synthMusic = loadSound("assets/sounds/spaceracer.mp3");
+    // Preloads sounds and music
+    menuMusic = loadSound("assets/sounds/spaceracer.mp3");
+    levelMusic = loadSound("assets/sounds/levelmusic.mp3");
+    menuSelect = loadSound("assets/sounds/menuselect.mp3");
+    overSelect = loadSound("assets/sounds/retry.mp3");
+    explosionSound = loadSound("assets/sounds/explosion.mp3");
+    engineIgnition = loadSound("assets/sounds/enginestart.mp3");
+    timeDistort = loadSound("assets/sounds/distort.mp3");
 }
 
 /**
@@ -192,6 +209,13 @@ function setup() {
   speederOn = new Sprite(speederTurnOn, 120, 300, 48, 3072);
   timeburnUse = new Sprite(timeburn, 200, 200, 12, 732);
   explosion = new Sprite(explosionSpeeder, 0, 0, 13, 832);
+
+  // Lowpass Filter global state
+  levelFilter = new p5.LowPass();
+  levelMusic.disconnect();      
+  levelMusic.connect(levelFilter);
+  levelFilter.freq(20000, 2); 
+  levelFilter.res(0, 2);
 }
 
 
@@ -220,6 +244,11 @@ function draw() {
  * current state
  */
 function mousePressed() {
+    // MENU click-to-start blocker
+    if (state === "menu" && !hasClickedToStart) {
+      hasClickedToStart = true;
+      return;
+    }
     switch (state) {
         case "menu":
             break;
@@ -528,6 +557,8 @@ function drawScoreWindowText() {
  * Partial reset of gamestate when returning to menu
 */
 function resetMenu() {
+    levelMusic.stop();
+
     easy.isPressed = false;
     easy.hover = false;
     medium.isPressed = false;
@@ -556,11 +587,15 @@ function resetMenu() {
 
     // Menu BG scrolling
     menuScrolling = true;
+    bgSpeed = [1, 2, 3, 4, 5];
   
-    // Start menu music loop
-    synthMusic.stop();
-    synthMusic.loop(0, 1, 1, 0, 49);
-
+    // Resets menu music
+    hasClickedToStart = true;
+    menuMusicStarted = false;
+  
+    // Resets level music frequency
+    levelFilter.freq(20000);
+    levelFilter.res(0);
 }
 
 /**
@@ -610,11 +645,10 @@ function resetGreenVariation() {
     // Make sure speeder is alive
     speederAlive = true;
     explosionTriggered = false;
-  
-    // Level music loop (from 50s)
-    synthMusic.stop();
-    synthMusic.loop(50, 1, 1, 1, 129);
 
+    // Resets level music frequency
+    levelFilter.freq(20000);
+    levelFilter.res(0);
 }
 
 /**
@@ -668,10 +702,10 @@ function resetBlueVariation() {
     // Make sure speeder is alive
     speederAlive = true;
     explosionTriggered = false;
-
-    // Level music loop (from 50s)
-    synthMusic.stop();
-    synthMusic.loop(50, 1, 1, 1, 129);
+  
+    // Resets level music frequency
+    levelFilter.freq(20000);
+    levelFilter.res(0);
 }
 
 /**
@@ -726,25 +760,38 @@ function resetRedVariation() {
     speederAlive = true;
     explosionTriggered = false;
   
-    // Level music loop (from 50s)
-    synthMusic.stop();
-    synthMusic.loop(50, 1, 1, 1, 129);
+    // Resets level music frequency
+    levelFilter.freq(20000);
+    levelFilter.res(0);
 }
 
 /**
  * Draws menu music
 */
-function drawMenuMusic() {
-    synthMusic.stop();
-    synthMusic.loop(0, 1, 1, 0, 49);
+function startMenuMusic() {
+  menuMusicStarted = true;
+
+  menuMusic.setVolume(0);
+  menuMusic.play(0, 1, 0, 0);
+  menuMusic.amp(1, 1);
 }
 
 /**
- * Draws menu music
+ * Draws level music
 */
 function drawLevelMusic() {
-    synthMusic.stop();
-    synthMusic.loop(50, 1, 1, 1, 129);
+  levelMusic.stop();
+  levelMusic.setVolume(0); 
+  levelMusic.loop(0, 1, 0, 0);
+  levelMusic.amp(1, 5);
+}
+
+/**
+ * Plays modified distort sound
+*/
+function playTimeDistort() {
+  timeDistort.setVolume(0.2);
+  timeDistort.play();
 }
 
 

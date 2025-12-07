@@ -58,7 +58,6 @@ function blueSetup() {
  * This will be called every frame when the blue variation is active
  */
 function blueDraw() {
-  //drawLevelMusic();
   drawScrollingBackgrounds(greenScrolling);
   startingPlatform();
 
@@ -129,13 +128,16 @@ function blueDraw() {
       // Stops speeder motion and drawing  
       speederAlive = false;
       explosionTriggered = true;
+      explosionSound.play();
+      levelFilter.freq(400, 1);
+      levelFilter.res(10, 1);
       // Resets explosion animation  
       explosion.frame = 0;
     }
 
     // Draws explosion if triggered
-    if (explosionTriggered) {
-      explosion.drawEX();
+      if (explosionTriggered) {
+        explosion.drawEX();
 
     // Stops drawing explosion when animation ends
       if (explosion.frame >= explosion.frames) {
@@ -182,6 +184,8 @@ function blueKeyPressed() {
   // Blocks future r presses
   if(!rAlreadyUsed){
     if (key === 'R' || key === 'r') {
+      engineIgnition.setVolume(2.5);
+      engineIgnition.play();
       spawningObstacles = true;
       lastSpawnTime = millis();
 
@@ -201,10 +205,14 @@ function blueKeyPressed() {
   // Check for Shift and that timeburn isn't already active
   // Turns timeburn icon gray after SHIFT press
   if (keyIsDown(SHIFT) && rAlreadyUsed && !timeSlowed && nextToGray < 3 && !isTimeburnOnCooldown) {
+    levelFilter.freq(400, 1.5);
+    levelFilter.res(10, 1.5);
+    levelMusic.rate(0.5, 1.5);
     grayScale[nextToGray] = true;
     nextToGray++;
 
     triggerTimeburn();
+    playTimeDistort();
 
     timeSlowed = true;
 
@@ -234,7 +242,9 @@ function blueKeyPressed() {
         for (let i = 0; i < objects.length; i++) {
             objects[i].speed = speeds[objects[i].index];
         }
-
+        levelFilter.freq(20000, 2);
+        levelFilter.res(0, 2);
+        levelMusic.rate(1, 1.5);
         timeSlowed = false;
     }, 5000);
   }
@@ -281,6 +291,7 @@ function returnMousePressed() {
         mouseX > 17 && mouseX < 17 + 60 && mouseY > 17 && mouseY < 17 + 60
     ) {
         // Returns to menu
+        overSelect.play();
         resetMenu();
         state = "menu";
     }
@@ -300,7 +311,8 @@ function scoreTextMousePressed() {
     mouseY > retryText.y - retryH / 2 &&
     mouseY < retryText.y + retryH / 2
   ) {
-
+    overSelect.play();
+    drawLevelMusic();
     // Calls the correct variation reset
     if (state === "green-variation") {
       resetGreenVariation();
@@ -326,6 +338,7 @@ function scoreTextMousePressed() {
     mouseY > menuText.y - menuH / 2 &&
     mouseY < menuText.y + menuH / 2
   ) {
+    overSelect.play();
     // Resets the game and returns to the menu
     resetMenu();
     state = "menu";

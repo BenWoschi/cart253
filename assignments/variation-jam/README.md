@@ -24,7 +24,14 @@ This bit should attribute any code, assets or other elements used taken from oth
 > - Reference on how to make a scrolling background by chjno (https://editor.p5js.org/chjno/sketches/ByZlypKWM).
 > - Reference on how to implement and make a sprite class by morejpeg (https://www.youtube.com/watch?v=eE65ody9MdI).
 > - Reference on how to implement decent collision by rjgilmour (https://editor.p5js.org/rjgilmour/sketches/F8RUWBXIW).
+> - Reference on how to implement lowpass in sound (https://p5js.org/reference/p5.sound/p5.LowPass/).
 > - Menu Music by marcobellonimusic (https://pixabay.com/music/synthwave-space-racer-retro-synthwave-pop-193769/).
+> - Level Music by NverAvetyanMusic (https://pixabay.com/music/synthwave-in-synthwave-153450/).
+> - Engine start SFX by peridactyloptrix (https://pixabay.com/sound-effects/hover-engine-6391/).
+> - Retry SFX by CreatorsHome (https://pixabay.com/sound-effects/on-001-337979/).
+> - Menu select SFX by CreatorsHome (https://pixabay.com/sound-effects/digital-click-357350/).
+> - Explosion SFX by Lumora_Studios (https://pixabay.com/sound-effects/pixel-explosion-319166/).
+> - Time Distort SFX by yodguard (https://pixabay.com/sound-effects/warp-magic-6-382387/).
 
 ## License
 
